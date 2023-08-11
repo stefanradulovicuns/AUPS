@@ -1,48 +1,142 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="getEmployees()"
+            placeholder="Pretraži radnike" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getEmployees()">
+            <option [ngValue]="'FirstName'" selected>Ime</option>
+            <option [ngValue]="'LastName'">Prezime</option>
+            <option [ngValue]="'Email'">Email</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getEmployees()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Prezime</th>
+            <th scope="col">Email</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let employee of employees">
+        <tr *ngFor="let employee of employees" (click)="onClickRow(employee)">
             <td>{{ employee.firstName }}</td>
             <td>{{ employee.lastName }}</td>
             <td>{{ employee.email }}</td>
-            <td><button type="button" class="btn btn-danger" *ngIf="employee.employeeId"
-                    (click)="deleteEmployee(employee.employeeId)">Obriši</button></td>
+            <td>
+                <button type="button" class="btn btn-primary" *ngIf="employee.employeeId"
+                    (click)="onClickUpdate($event, employee)">Izmeni</button>
+                <button type="button" class="btn btn-danger" *ngIf="employee.employeeId"
+                    (click)="onClickDelete($event, employee.employeeId)">Obriši</button>
+            </td>
         </tr>
     </tbody>
 </table>
 
-<button type="button" class="btn btn-primary" (click)="createEmployee()">Dodaj</button>
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="employeesTotalCount" [collectionSize]="employeesTotalCount" [(page)]="page"
+        [pageSize]="count" (pageChange)="getEmployees()">
+    </ngb-pagination>
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getEmployees()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
 </div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Novi radnik</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+            <div class="form-group">
+                <label for="firstName">Ime</label>
+                <input type="text" class="form-control" id="firstName" placeholder="Unesite ime"
+                    formControlName="firstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Prezime</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Unesite prezime"
+                    formControlName="lastName">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="Unesite email" formControlName="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Lozinka"
+                    formControlName="password">
+            </div>
+            <div class="form-group">
+                <label for="jmbg">JMBG</label>
+                <input type="text" class="form-control" id="jmbg" placeholder="Unesite JMBG" formControlName="jmbg">
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Broj telefona</label>
+                <input type="text" class="form-control" id="phoneNumber" placeholder="Unesite broj telefona"
+                    formControlName="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="address">Adresa</label>
+                <input type="text" class="form-control" id="address" placeholder="Unesite adresu"
+                    formControlName="address">
+            </div>
+            <div class="form-group">
+                <label for="city">Grad</label>
+                <input type="text" class="form-control" id="city" placeholder="Unesite grad" formControlName="city">
+            </div>
+            <div class="form-group">
+                <label for="sallary">Plata</label>
+                <input type="number" class="form-control" id="sallary" placeholder="Unesite platu"
+                    formControlName="sallary">
+            </div>
+            <div class="form-group">
+                <label for="dateOfEmployment">Datum zaposlenja</label>
+                <input type="text" class="form-control" id="dateOfEmployment" placeholder="Unesite datum zaposlenja"
+                    formControlName="dateOfEmployment">
+            </div>
+            <div class="form-group">
+                <label for="workplace">Radno mesto</label>
+                <input type="text" class="form-control" id="workplace" placeholder="Unesite radno mesto"
+                    formControlName="workplaceId">
+            </div>
+            <div class="form-group">
+                <label for="organizationalUnit">Organizaciona jedinica</label>
+                <input type="text" class="form-control" id="organizationalUnit"
+                    placeholder="Unesite organizacionu jedinicu" formControlName="organizationalUnitId">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+    </div>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
