@@ -8,12 +8,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModalRef, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkplaceComponent } from './components/workplace/workplace.component';
+import { OrganizationalUnitComponent } from './components/organizational-unit/organizational-unit.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeeComponent,
     WorkplaceComponent,
+    OrganizationalUnitComponent,
   ],
   imports: [
     BrowserModule,

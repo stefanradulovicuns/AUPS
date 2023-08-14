@@ -38,10 +38,8 @@
             <td>{{ employee.lastName }}</td>
             <td>{{ employee.email }}</td>
             <td>
-                <button type="button" class="btn btn-primary" *ngIf="employee.employeeId"
-                    (click)="onClickUpdate($event, employee)">Izmeni</button>
-                <button type="button" class="btn btn-danger" *ngIf="employee.employeeId"
-                    (click)="onClickDelete($event, employee)">Obriši</button>
+                <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, employee)">Izmeni</button>
+                <button type="button" class="btn btn-danger" (click)="onClickDelete($event, employee)">Obriši</button>
             </td>
         </tr>
     </tbody>

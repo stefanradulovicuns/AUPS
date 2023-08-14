@@ -1,24 +1,24 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Workplace } from 'src/app/models/workplace';
-import { WorkplaceService } from 'src/app/services/workplace.service';
+import { OrganizationalUnit } from 'src/app/models/organizationalUnit';
+import { OrganizationalUnitService } from 'src/app/services/organizational-unit.service';
 
 @Component({
-  selector: 'app-workplace',
-  templateUrl: './workplace.component.html',
-  styleUrls: ['./workplace.component.css']
+  selector: 'app-organizational-unit',
+  templateUrl: './organizational-unit.component.html',
+  styleUrls: ['./organizational-unit.component.css']
 })
-export class WorkplaceComponent implements OnInit {
+export class OrganizationalUnitComponent implements OnInit {
 
   @ViewChild('content') modal!: ElementRef;
 
   modalReference!: NgbModalRef;
 
-  workplaces: Workplace[] | null = null;
-  workplacesTotalCount: number | null = null;
+  organizationalUnits: OrganizationalUnit[] | null = null;
+  organizationalUnitsTotalCount: number | null = null;
   search: string = '';
-  sortBy: string = 'WorkplaceName';
+  sortBy: string = 'OrganizationalUnitName';
   sortOrder: string = 'ASC';
   page: number = 1;
   count: number = 2;
@@ -27,8 +27,8 @@ export class WorkplaceComponent implements OnInit {
   closeResult = ''
 
   formGroup: FormGroup = this.fb.group({
-    workplaceId: [''],
-    workplaceName: ['', Validators.required]
+    organizationalUnitId: [''],
+    organizationalUnitName: ['', Validators.required]
   });
   isSubmitted: boolean = false;
   operation: string | null = null;
@@ -36,19 +36,20 @@ export class WorkplaceComponent implements OnInit {
   toastMessage: string | null = null;
   isError: boolean = false;
 
-  constructor(private workplaceService: WorkplaceService,
+  constructor(private organizationalUnitService: OrganizationalUnitService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.getWorkplaces();
+    this.getOrganizationalUnits();
   }
 
-  getWorkplaces() {
-    this.workplaceService.getWorkplaces(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
+  getOrganizationalUnits() {
+    this.isLoading = true;
+    this.organizationalUnitService.getOrganizationalUnits(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
       next: (data) => {
-        this.workplaces = data;
-        this.workplacesTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
+        this.organizationalUnits = data;
+        this.organizationalUnitsTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
       },
 
       error: (error) => {
@@ -63,12 +64,12 @@ export class WorkplaceComponent implements OnInit {
     });
   }
 
-  createWorkplace(workplace: Workplace) {
-    this.workplaceService.createWorkplace(workplace).subscribe({
+  createOrganizationalUnit(organizationalUnit: OrganizationalUnit) {
+    this.organizationalUnitService.createOrganizationalUnit(organizationalUnit).subscribe({
       next: () => {
-        this.getWorkplaces();
+        this.getOrganizationalUnits();
         this.modalReference?.close();
-        this.toastMessage = 'Uspešno dodato novo radno mesto';
+        this.toastMessage = 'Uspešno dodata nova organizaciona jedinica';
       },
 
       error: (error) => {
@@ -81,10 +82,10 @@ export class WorkplaceComponent implements OnInit {
     });
   }
 
-  updateWorkplace(workplace: Workplace) {
-    this.workplaceService.updateWorkplace(workplace).subscribe({
+  updateOrganizationalUnit(organizationalUnit: OrganizationalUnit) {
+    this.organizationalUnitService.updateOrganizationalUnit(organizationalUnit).subscribe({
       next: () => {
-        this.getWorkplaces();
+        this.getOrganizationalUnits();
         this.modalReference?.close();
         this.toastMessage = 'Uspešno izmenjeni podaci';
       },
@@ -99,12 +100,12 @@ export class WorkplaceComponent implements OnInit {
     });
   }
 
-  deleteWorkplace(id: string) {
-    this.workplaceService.deleteWorkplace(id).subscribe({
+  deleteOrganizationalUnit(id: string) {
+    this.organizationalUnitService.deleteOrganizationalUnit(id).subscribe({
       next: () => {
-        this.getWorkplaces();
+        this.getOrganizationalUnits();
         this.modalReference?.close();
-        this.toastMessage = 'Radno mesto je uspešno obrisano';
+        this.toastMessage = 'Organizaciona jedinica je uspešno obrisana';
       },
 
       error: (error) => {
@@ -142,12 +143,12 @@ export class WorkplaceComponent implements OnInit {
 
   onInputSearch() {
     this.page = 1;
-    this.getWorkplaces();
+    this.getOrganizationalUnits();
   }
 
-  onClickRow(workplace: Workplace) {
-    const { totalCount, ...workplaceData } = workplace;
-    this.formGroup.setValue({ ...workplaceData });
+  onClickRow(organizationalUnit: OrganizationalUnit) {
+    const { totalCount, ...organizationalUnitData } = organizationalUnit;
+    this.formGroup.setValue({ ...organizationalUnitData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
     this.open(this.modal);
@@ -160,19 +161,19 @@ export class WorkplaceComponent implements OnInit {
     this.open(this.modal);
   }
 
-  onClickUpdate(event: Event, workplace: Workplace) {
+  onClickUpdate(event: Event, organizationalUnit: OrganizationalUnit) {
     event.stopPropagation();
-    const { totalCount, ...workplaceData } = workplace;
-    this.formGroup.setValue({ ...workplaceData });
+    const { totalCount, ...organizationalUnitData } = organizationalUnit;
+    this.formGroup.setValue({ ...organizationalUnitData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
     this.open(this.modal);
   }
 
-  onClickDelete(event: Event, workplace: Workplace) {
+  onClickDelete(event: Event, organizationalUnit: OrganizationalUnit) {
     event.stopPropagation();
-    const { totalCount, ...workplaceData } = workplace;
-    this.formGroup.setValue({ ...workplaceData });
+    const { totalCount, ...organizationalUnitData } = organizationalUnit;
+    this.formGroup.setValue({ ...organizationalUnitData });
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);
@@ -182,11 +183,11 @@ export class WorkplaceComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.formGroup.valid) {
-      const workplace = Object.assign(this.formGroup.value);
+      const organizationalUnit = Object.assign(this.formGroup.value);
       if (this.operation === 'CREATE') {
-        this.createWorkplace(workplace);
+        this.createOrganizationalUnit(organizationalUnit);
       } else if (this.operation === 'UPDATE') {
-        this.updateWorkplace(workplace);
+        this.updateOrganizationalUnit(organizationalUnit);
       }
     }
   }
@@ -195,5 +196,4 @@ export class WorkplaceComponent implements OnInit {
     this.toastMessage = null;
     this.isError = false;
   }
-
 }

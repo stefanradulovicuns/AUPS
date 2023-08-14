@@ -1,0 +1,103 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži organizacione jedinice" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getOrganizationalUnits()">
+            <option [ngValue]="'OrganizationalUnitName'" selected>Naziv organizacione jedinice</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getOrganizationalUnits()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Naziv organizacione jedinice</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let organizationalUnit of organizationalUnits" (click)="onClickRow(organizationalUnit)">
+            <td>{{ organizationalUnit.organizationalUnitName }}</td>
+            <td>
+                <button type="button" class="btn btn-primary"
+                    (click)="onClickUpdate($event, organizationalUnit)">Izmeni</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onClickDelete($event, organizationalUnit)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="organizationalUnitsTotalCount" [collectionSize]="organizationalUnitsTotalCount"
+        [(page)]="page" [pageSize]="count" (pageChange)="getOrganizationalUnits()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getOrganizationalUnits()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o organizacionoj jedinici
+        </h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Nova organizaciona jedinica</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o organizacionoj
+            jedinici</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o organizacionoj
+            jedinici</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="organizationalUnitName" [class.text-danger]="formGroup.get('organizationalUnitName')?.invalid && 
+                (formGroup.get('organizationalUnitName')?.dirty ||
+                formGroup.get('organizationalUnitName')?.touched ||
+                isSubmitted)">Naziv organizacione jedinice</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('organizationalUnitName')?.invalid && 
+                (formGroup.get('organizationalUnitName')?.dirty ||
+                formGroup.get('organizationalUnitName')?.touched ||
+                isSubmitted)" id="organizationalUnitName" placeholder="Unesite naziv organizacione jedinice"
+                    formControlName="organizationalUnitName">
+                <span *ngIf="formGroup.get('firstName')?.hasError('required') && 
+                (formGroup.get('organizationalUnitName')?.dirty ||
+                formGroup.get('organizationalUnitName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteOrganizationalUnit(formGroup.get('organizationalUnitId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

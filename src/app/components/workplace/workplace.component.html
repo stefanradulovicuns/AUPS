@@ -32,10 +32,8 @@
         <tr *ngFor="let workplace of workplaces" (click)="onClickRow(workplace)">
             <td>{{ workplace.workplaceName }}</td>
             <td>
-                <button type="button" class="btn btn-primary" *ngIf="workplace.workplaceId"
-                    (click)="onClickUpdate($event, workplace)">Izmeni</button>
-                <button type="button" class="btn btn-danger" *ngIf="workplace.workplaceId"
-                    (click)="onClickDelete($event, workplace)">Obriši</button>
+                <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, workplace)">Izmeni</button>
+                <button type="button" class="btn btn-danger" (click)="onClickDelete($event, workplace)">Obriši</button>
             </td>
         </tr>
     </tbody>
@@ -58,10 +56,11 @@
 
 <ng-template #content let-modal>
     <div class="modal-header">
-        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o radniku</h4>
-        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi radnik</h4>
-        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o radniku</h4>
-        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o radniku</h4>
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o radnom mestu</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novo radno mesto</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o radnom mestu</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o radnom mestu
+        </h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
     <form [formGroup]="formGroup" (submit)="onSubmitForm()">
