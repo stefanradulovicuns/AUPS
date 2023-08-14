@@ -21,10 +21,6 @@ export class EmployeeService {
     return this.httpClient.get<Employee[]>(`${BACKEND_URL}Employee`, { params: queryParams });
   }
 
-  getEmployeesTotalCount(): Observable<number> {
-    return this.httpClient.get<number>(`${BACKEND_URL}Employee/totalCount`);
-  }
-
   getEmployeeById(id: string): Observable<Employee> {
     return this.httpClient.get<Employee>(`${BACKEND_URL}Employee/${id}`);
   }

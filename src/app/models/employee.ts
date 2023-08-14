@@ -12,6 +12,7 @@ export class Employee {
     dateOfEmployment: Date | null = null;
     workplaceId: string | null = null;
     organizationalUnitId: string | null = null;
+    totalCount: number | null = null;
 
     constructor(employeeId: string, firstName: string, lastName: string, email: string, password: string, jmbg: string,
         phoneNumber: string, address: string, city: string, sallary: number, dateOfEmployment: Date, workplaceId: string,

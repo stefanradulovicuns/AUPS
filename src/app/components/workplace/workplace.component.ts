@@ -1,24 +1,24 @@
-import { Component, ElementRef, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Employee } from 'src/app/models/employee';
-import { EmployeeService } from 'src/app/services/employee.service';
+import { Workplace } from 'src/app/models/workplace';
+import { WorkplaceService } from 'src/app/services/workplace.service';
 
 @Component({
-  selector: 'app-employee',
-  templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.css']
+  selector: 'app-workplace',
+  templateUrl: './workplace.component.html',
+  styleUrls: ['./workplace.component.css']
 })
-export class EmployeeComponent implements OnInit {
+export class WorkplaceComponent {
 
   @ViewChild('content') modal!: ElementRef;
 
   modalReference!: NgbModalRef;
 
-  employees: Employee[] | null = null;
-  employeesTotalCount: number | null = null;
+  workplaces: Workplace[] | null = null;
+  workplacesTotalCount: number | null = null;
   search: string = '';
-  sortBy: string = 'FirstName';
+  sortBy: string = 'WorkplaceName';
   sortOrder: string = 'ASC';
   page: number = 1;
   count: number = 2;
@@ -27,19 +27,8 @@ export class EmployeeComponent implements OnInit {
   closeResult = ''
 
   formGroup: FormGroup = this.fb.group({
-    employeeId: [''],
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
-    jmbg: ['', Validators.required],
-    phoneNumber: ['', Validators.required],
-    address: ['', Validators.required],
-    city: ['', Validators.required],
-    sallary: [0, Validators.required],
-    dateOfEmployment: ['', Validators.required],
-    workplaceId: ['', Validators.required],
-    organizationalUnitId: ['', Validators.required],
+    workplaceId: [''],
+    workplaceName: ['', Validators.required]
   });
   isSubmitted: boolean = false;
   operation: string | null = null;
@@ -47,20 +36,19 @@ export class EmployeeComponent implements OnInit {
   toastMessage: string | null = null;
   isError: boolean = false;
 
-  constructor(private employeeService: EmployeeService,
+  constructor(private workplaceService: WorkplaceService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.getEmployees();
+    this.getWorkplaces();
   }
 
-  getEmployees() {
-    this.isLoading = true;
-    this.employeeService.getEmployees(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
+  getWorkplaces() {
+    this.workplaceService.getWorkplaces(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
       next: (data) => {
-        this.employees = data;
-        this.employeesTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
+        this.workplaces = data;
+        this.workplacesTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
       },
 
       error: (error) => {
@@ -75,12 +63,12 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  createEmployee(employee: Employee) {
-    this.employeeService.createEmployee(employee).subscribe({
+  createWorkplace(workplace: Workplace) {
+    this.workplaceService.createWorkplace(workplace).subscribe({
       next: () => {
-        this.getEmployees();
+        this.getWorkplaces();
         this.modalReference?.close();
-        this.toastMessage = 'Uspešno dodat novi radnik';
+        this.toastMessage = 'Uspešno dodato novo radno mesto';
       },
 
       error: (error) => {
@@ -93,10 +81,10 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  updateEmployee(employee: Employee) {
-    this.employeeService.updateEmployee(employee).subscribe({
+  updateWorkplace(workplace: Workplace) {
+    this.workplaceService.updateWorkplace(workplace).subscribe({
       next: () => {
-        this.getEmployees();
+        this.getWorkplaces();
         this.modalReference?.close();
         this.toastMessage = 'Uspešno izmenjeni podaci';
       },
@@ -111,12 +99,12 @@ export class EmployeeComponent implements OnInit {
     });
   }
 
-  deleteEmployee(id: string) {
-    this.employeeService.deleteEmployee(id).subscribe({
+  deleteWorkplace(id: string) {
+    this.workplaceService.deleteWorkplace(id).subscribe({
       next: () => {
-        this.getEmployees();
+        this.getWorkplaces();
         this.modalReference?.close();
-        this.toastMessage = 'Radnik je uspešno obrisan';
+        this.toastMessage = 'Radno mesto je uspešno obrisano';
       },
 
       error: (error) => {
@@ -154,12 +142,12 @@ export class EmployeeComponent implements OnInit {
 
   onInputSearch() {
     this.page = 1;
-    this.getEmployees();
+    this.getWorkplaces();
   }
 
-  onClickRow(employee: Employee) {
-    const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData });
+  onClickRow(workplace: Workplace) {
+    const { totalCount, ...workplaceData } = workplace;
+    this.formGroup.setValue({ ...workplaceData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
     this.open(this.modal);
@@ -172,19 +160,19 @@ export class EmployeeComponent implements OnInit {
     this.open(this.modal);
   }
 
-  onClickUpdate(event: Event, employee: Employee) {
+  onClickUpdate(event: Event, workplace: Workplace) {
     event.stopPropagation();
-    const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData });
+    const { totalCount, ...workplaceData } = workplace;
+    this.formGroup.setValue({ ...workplaceData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
     this.open(this.modal);
   }
 
-  onClickDelete(event: Event, employee: Employee) {
+  onClickDelete(event: Event, workplace: Workplace) {
     event.stopPropagation();
-    const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData });
+    const { totalCount, ...workplaceData } = workplace;
+    this.formGroup.setValue({ ...workplaceData });
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);
@@ -194,11 +182,11 @@ export class EmployeeComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.formGroup.valid) {
-      const employee = Object.assign(this.formGroup.value);
+      const workplace = Object.assign(this.formGroup.value);
       if (this.operation === 'CREATE') {
-        this.createEmployee(employee);
+        this.createWorkplace(workplace);
       } else if (this.operation === 'UPDATE') {
-        this.updateEmployee(employee);
+        this.updateWorkplace(workplace);
       }
     }
   }
@@ -207,4 +195,5 @@ export class EmployeeComponent implements OnInit {
     this.toastMessage = null;
     this.isError = false;
   }
+
 }

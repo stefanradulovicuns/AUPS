@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-3">
         <label for="search">Pretraga</label>
-        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="getEmployees()"
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
             placeholder="Pretraži radnike" />
     </div>
     <div class="col-md-3">
@@ -41,7 +41,7 @@
                 <button type="button" class="btn btn-primary" *ngIf="employee.employeeId"
                     (click)="onClickUpdate($event, employee)">Izmeni</button>
                 <button type="button" class="btn btn-danger" *ngIf="employee.employeeId"
-                    (click)="onClickDelete($event, employee.employeeId)">Obriši</button>
+                    (click)="onClickDelete($event, employee)">Obriši</button>
             </td>
         </tr>
     </tbody>
@@ -64,74 +64,197 @@
 
 <ng-template #content let-modal>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Novi radnik</h4>
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o radniku</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi radnik</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o radniku</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o radniku</h4>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
     </div>
-    <div class="modal-body">
-        <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
             <div class="form-group">
-                <label for="firstName">Ime</label>
-                <input type="text" class="form-control" id="firstName" placeholder="Unesite ime"
-                    formControlName="firstName">
+                <label for="firstName" [class.text-danger]="formGroup.get('firstName')?.invalid && 
+                (formGroup.get('firstName')?.dirty ||
+                formGroup.get('firstName')?.touched ||
+                isSubmitted)">Ime</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('firstName')?.invalid && 
+                (formGroup.get('firstName')?.dirty ||
+                formGroup.get('firstName')?.touched ||
+                isSubmitted)" id="firstName" placeholder="Unesite ime" formControlName="firstName">
+                <span *ngIf="formGroup.get('firstName')?.hasError('required') && 
+                (formGroup.get('firstName')?.dirty ||
+                formGroup.get('firstName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="lastName">Prezime</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Unesite prezime"
-                    formControlName="lastName">
+                <label for="lastName" [class.text-danger]="formGroup.get('lastName')?.invalid && 
+                (formGroup.get('lastName')?.dirty ||
+                formGroup.get('lastName')?.touched ||
+                isSubmitted)">Prezime</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('lastName')?.invalid && 
+                (formGroup.get('lastName')?.dirty ||
+                formGroup.get('lastName')?.touched ||
+                isSubmitted)" id="lastName" placeholder="Unesite prezime" formControlName="lastName">
+                <span *ngIf="formGroup.get('lastName')?.hasError('required') && 
+                (formGroup.get('lastName')?.dirty ||
+                formGroup.get('lastName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Unesite email" formControlName="email">
+                <label for="email" [class.text-danger]="formGroup.get('email')?.invalid && 
+                (formGroup.get('email')?.dirty ||
+                formGroup.get('email')?.touched ||
+                isSubmitted)">Email</label>
+                <input type="email" class="form-control" [class.is-invalid]="formGroup.get('email')?.invalid && 
+                (formGroup.get('email')?.dirty ||
+                formGroup.get('email')?.touched ||
+                isSubmitted)" id="email" placeholder="Unesite email" formControlName="email">
+                <span *ngIf="formGroup.get('email')?.hasError('required') && 
+                (formGroup.get('email')?.dirty ||
+                formGroup.get('email')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+                <span *ngIf="formGroup.get('email')?.hasError('email') &&
+                (formGroup.get('email')?.dirty
+                || formGroup.get('email')?.touched
+                || isSubmitted)" class="text-danger">Email adresa mora biti u ispravnom formatu</span>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Lozinka"
-                    formControlName="password">
+                <label for="password" [class.text-danger]="formGroup.get('password')?.invalid && 
+                (formGroup.get('password')?.dirty ||
+                formGroup.get('password')?.touched ||
+                isSubmitted)">Password</label>
+                <input type="password" class="form-control" [class.is-invalid]="formGroup.get('password')?.invalid && 
+                (formGroup.get('password')?.dirty ||
+                formGroup.get('password')?.touched ||
+                isSubmitted)" id="password" placeholder="Lozinka" formControlName="password">
+                <span *ngIf="formGroup.get('password')?.hasError('required') && 
+                (formGroup.get('password')?.dirty ||
+                formGroup.get('password')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="jmbg">JMBG</label>
-                <input type="text" class="form-control" id="jmbg" placeholder="Unesite JMBG" formControlName="jmbg">
+                <label for="jmbg" [class.text-danger]="formGroup.get('jmbg')?.invalid && 
+                (formGroup.get('jmbg')?.dirty ||
+                formGroup.get('jmbg')?.touched ||
+                isSubmitted)">JMBG</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('jmbg')?.invalid && 
+                (formGroup.get('jmbg')?.dirty ||
+                formGroup.get('jbmg')?.touched ||
+                isSubmitted)" id="jmbg" placeholder="Unesite JMBG" formControlName="jmbg">
+                <span *ngIf="formGroup.get('jmbg')?.hasError('required') && 
+                (formGroup.get('jmbg')?.dirty ||
+                formGroup.get('jmbg')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="phoneNumber">Broj telefona</label>
-                <input type="text" class="form-control" id="phoneNumber" placeholder="Unesite broj telefona"
-                    formControlName="phoneNumber">
+                <label for="phoneNumber" [class.text-danger]="formGroup.get('phoneNumber')?.invalid && 
+                (formGroup.get('phoneNumber')?.dirty ||
+                formGroup.get('phoneNumber')?.touched ||
+                isSubmitted)">Broj telefona</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('phoneNumber')?.invalid && 
+                (formGroup.get('phoneNumber')?.dirty ||
+                formGroup.get('proneNumber')?.touched ||
+                isSubmitted)" id="phoneNumber" placeholder="Unesite broj telefona" formControlName="phoneNumber">
+                <span *ngIf="formGroup.get('phoneNumber')?.hasError('required') && 
+                (formGroup.get('phoneNumber')?.dirty ||
+                formGroup.get('phoneNumber')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="address">Adresa</label>
-                <input type="text" class="form-control" id="address" placeholder="Unesite adresu"
-                    formControlName="address">
+                <label for="address" [class.text-danger]="formGroup.get('address')?.invalid && 
+                (formGroup.get('address')?.dirty ||
+                formGroup.get('address')?.touched ||
+                isSubmitted)">Adresa</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('address')?.invalid && 
+                (formGroup.get('address')?.dirty ||
+                formGroup.get('address')?.touched ||
+                isSubmitted)" id="address" placeholder="Unesite adresu" formControlName="address">
+                <span *ngIf="formGroup.get('address')?.hasError('required') && 
+                (formGroup.get('address')?.dirty ||
+                formGroup.get('address')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="city">Grad</label>
-                <input type="text" class="form-control" id="city" placeholder="Unesite grad" formControlName="city">
+                <label for="city" [class.text-danger]="formGroup.get('city')?.invalid && 
+                (formGroup.get('city')?.dirty ||
+                formGroup.get('city')?.touched ||
+                isSubmitted)">Grad</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('city')?.invalid && 
+                (formGroup.get('city')?.dirty ||
+                formGroup.get('city')?.touched ||
+                isSubmitted)" id="city" placeholder="Unesite grad" formControlName="city">
+                <span *ngIf="formGroup.get('city')?.hasError('required') && 
+                (formGroup.get('city')?.dirty ||
+                formGroup.get('city')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="sallary">Plata</label>
-                <input type="number" class="form-control" id="sallary" placeholder="Unesite platu"
-                    formControlName="sallary">
+                <label for="sallary" [class.text-danger]="formGroup.get('sallary')?.invalid && 
+                (formGroup.get('sallary')?.dirty ||
+                formGroup.get('sallary')?.touched ||
+                isSubmitted)">Plata</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('sallary')?.invalid && 
+                (formGroup.get('sallary')?.dirty ||
+                formGroup.get('sallary')?.touched ||
+                isSubmitted)" id="sallary" placeholder="Unesite platu" formControlName="sallary">
+                <span *ngIf="formGroup.get('sallary')?.hasError('required') && 
+                (formGroup.get('sallary')?.dirty ||
+                formGroup.get('sallary')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="dateOfEmployment">Datum zaposlenja</label>
-                <input type="text" class="form-control" id="dateOfEmployment" placeholder="Unesite datum zaposlenja"
+                <label for="dateOfEmployment" [class.text-danger]="formGroup.get('dateOfEmployment')?.invalid && 
+                (formGroup.get('dateOfEmployment')?.dirty ||
+                formGroup.get('dateOfEmployment')?.touched ||
+                isSubmitted)">Datum zaposlenja</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('dateOfEmployment')?.invalid && 
+                (formGroup.get('dateOfEmployment')?.dirty ||
+                formGroup.get('dateOfEmployment')?.touched ||
+                isSubmitted)" id="dateOfEmployment" placeholder="Unesite datum zaposlenja"
                     formControlName="dateOfEmployment">
+                <span *ngIf="formGroup.get('firstName')?.hasError('dateOfEmployment') && 
+                    (formGroup.get('dateOfEmployment')?.dirty ||
+                    formGroup.get('dateOfEmployment')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="workplace">Radno mesto</label>
-                <input type="text" class="form-control" id="workplace" placeholder="Unesite radno mesto"
-                    formControlName="workplaceId">
+                <label for="workplace" [class.text-danger]="formGroup.get('workplaceId')?.invalid && 
+                (formGroup.get('workplaceId')?.dirty ||
+                formGroup.get('workplaceId')?.touched ||
+                isSubmitted)">Radno mesto</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('workplaceId')?.invalid && 
+                (formGroup.get('workplaceId')?.dirty ||
+                formGroup.get('workplaceId')?.touched ||
+                isSubmitted)" id="workplace" placeholder="Unesite radno mesto" formControlName="workplaceId">
+                <span *ngIf="formGroup.get('workplaceId')?.hasError('required') && 
+                (formGroup.get('workplaceId')?.dirty ||
+                formGroup.get('workplaceId')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="organizationalUnit">Organizaciona jedinica</label>
-                <input type="text" class="form-control" id="organizationalUnit"
-                    placeholder="Unesite organizacionu jedinicu" formControlName="organizationalUnitId">
+                <label for="organizationalUnit" [class.text-danger]="formGroup.get('organizationalUnitId')?.invalid && 
+                (formGroup.get('organizationalUnitId')?.dirty ||
+                formGroup.get('organizationalUnitId')?.touched ||
+                isSubmitted)">Organizaciona jedinica</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('organizationalUnitId')?.invalid && 
+                (formGroup.get('organizationalUnitId')?.dirty ||
+                formGroup.get('organizationalUnitId')?.touched ||
+                isSubmitted)" id="organizationalUnit" placeholder="Unesite organizacionu jedinicu"
+                    formControlName="organizationalUnitId">
+                <span *ngIf="formGroup.get('organizationalUnitId')?.hasError('required') && 
+                    (formGroup.get('organizationalUnitId')?.dirty ||
+                    formGroup.get('organizationalUnitId')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteEmployee(formGroup.get('employeeId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
 </ng-template>
 
 <hr />

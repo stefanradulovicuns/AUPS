@@ -5,13 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeComponent } from './components/employee/employee.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { WorkplaceComponent } from './components/workplace/workplace.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EmployeeComponent,
+    WorkplaceComponent,
   ],
   imports: [
     BrowserModule,
