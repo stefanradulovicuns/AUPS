@@ -9,6 +9,7 @@ import { NgbModalRef, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkplaceComponent } from './components/workplace/workplace.component';
 import { OrganizationalUnitComponent } from './components/organizational-unit/organizational-unit.component';
+import { ProductionOrderComponent } from './components/production-order/production-order.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { OrganizationalUnitComponent } from './components/organizational-unit/or
     EmployeeComponent,
     WorkplaceComponent,
     OrganizationalUnitComponent,
+    ProductionOrderComponent,
   ],
   imports: [
     BrowserModule,

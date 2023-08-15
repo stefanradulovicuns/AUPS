@@ -1,0 +1,169 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži naloge za proizvodnju" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getProductionOrders()">
+            <option [ngValue]="'StartDate'" selected>Datum početka</option>
+            <option [ngValue]="'EndDate'">Datum završetka</option>
+            <option [ngValue]="'Quantity'">Količina</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getProductionOrders()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Datum početka</th>
+            <th scope="col">Datum završetka</th>
+            <th scope="col">Količina</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let productionOrder of productionOrders" (click)="onClickRow(productionOrder)">
+            <td>{{ productionOrder.startDate }}</td>
+            <td>{{ productionOrder.endDate }}</td>
+            <td>{{ productionOrder.quantity }}</td>
+            <td>
+                <button type="button" class="btn btn-primary"
+                    (click)="onClickUpdate($event, productionOrder)">Izmeni</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onClickDelete($event, productionOrder)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="productionOrdersTotalCount" [collectionSize]="productionOrdersTotalCount" [(page)]="page"
+        [pageSize]="count" (pageChange)="getProductionOrders()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getProductionOrders()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o nalogu za proizvodnju</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi nalog za proizvodnju</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o nalogu za
+            proizvodnju</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o nalogu za
+            proizvodnju</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="startDate" [class.text-danger]="formGroup.get('startDate')?.invalid && 
+                    (formGroup.get('startDate')?.dirty ||
+                    formGroup.get('startDate')?.touched ||
+                    isSubmitted)">Datum početka</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('startDate')?.invalid && 
+                    (formGroup.get('startDate')?.dirty ||
+                    formGroup.get('startDate')?.touched ||
+                    isSubmitted)" id="startDate" placeholder="Unesite datum početka" formControlName="startDate">
+                <span *ngIf="formGroup.get('startDate')?.hasError('startDate') && 
+                    (formGroup.get('startDate')?.dirty ||
+                    formGroup.get('startDate')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="endDate" [class.text-danger]="formGroup.get('endDate')?.invalid && 
+                    (formGroup.get('endDate')?.dirty ||
+                    formGroup.get('endDate')?.touched ||
+                    isSubmitted)">Datum završetka</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('endDate')?.invalid && 
+                    (formGroup.get('endDate')?.dirty ||
+                    formGroup.get('endDate')?.touched ||
+                    isSubmitted)" id="endDate" placeholder="Unesite datum završetka" formControlName="endDate">
+                <span *ngIf="formGroup.get('endDate')?.hasError('endDate') && 
+                    (formGroup.get('endDate')?.dirty ||
+                    formGroup.get('endDate')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="quantity" [class.text-danger]="formGroup.get('quantity')?.invalid && 
+                (formGroup.get('quantity')?.dirty ||
+                formGroup.get('quantity')?.touched ||
+                isSubmitted)">Količina</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('quantity')?.invalid && 
+                (formGroup.get('quantity')?.dirty ||
+                formGroup.get('quantity')?.touched ||
+                isSubmitted)" id="quantity" placeholder="Unesite količinu" formControlName="quantity">
+                <span *ngIf="formGroup.get('quantity')?.hasError('required') && 
+                (formGroup.get('quantity')?.dirty ||
+                formGroup.get('quantity')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="note">Napomena</label>
+                <textarea type="text" class="form-control" id="note" placeholder="Unesite napomenu"
+                    formControlName="note"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="employeeId" [class.text-danger]="formGroup.get('employeeId')?.invalid && 
+                    (formGroup.get('employeeId')?.dirty ||
+                    formGroup.get('employeeId')?.touched ||
+                    isSubmitted)">Employee</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('employeeId')?.invalid && 
+                    (formGroup.get('employeeId')?.dirty ||
+                    formGroup.get('employeeId')?.touched ||
+                    isSubmitted)" id="employeeId" placeholder="Unesite radnika" formControlName="employeeId">
+                <span *ngIf="formGroup.get('employeeId')?.hasError('required') && 
+                    (formGroup.get('employeeId')?.dirty ||
+                    formGroup.get('employeeId')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="objectOfLaborId" [class.text-danger]="formGroup.get('objectOfLaborId')?.invalid && 
+                    (formGroup.get('objectOfLaborId')?.dirty ||
+                    formGroup.get('objectOfLaborId')?.touched ||
+                    isSubmitted)">Object of labor</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
+                    (formGroup.get('objectOfLaborId')?.dirty ||
+                    formGroup.get('objectOfLaborId')?.touched ||
+                    isSubmitted)" id="objectOfLaborId" placeholder="Unesite predmet rada"
+                    formControlName="objectOfLaborId">
+                <span *ngIf="formGroup.get('objectOfLaborId')?.hasError('required') && 
+                    (formGroup.get('objectOfLaborId')?.dirty ||
+                    formGroup.get('objectOfLaborId')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteProductionOrder(formGroup.get('productionOrderId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

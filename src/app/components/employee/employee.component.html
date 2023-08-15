@@ -210,7 +210,7 @@
                 formGroup.get('dateOfEmployment')?.touched ||
                 isSubmitted)" id="dateOfEmployment" placeholder="Unesite datum zaposlenja"
                     formControlName="dateOfEmployment">
-                <span *ngIf="formGroup.get('firstName')?.hasError('dateOfEmployment') && 
+                <span *ngIf="formGroup.get('dateOfEmployment')?.hasError('dateOfEmployment') && 
                     (formGroup.get('dateOfEmployment')?.dirty ||
                     formGroup.get('dateOfEmployment')?.touched ||
                     isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
