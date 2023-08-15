@@ -6,6 +6,7 @@ import { OrganizationalUnitComponent } from './components/organizational-unit/or
 import { ProductionOrderComponent } from './components/production-order/production-order.component';
 import { ObjectOfLaborComponent } from './components/object-of-labor/object-of-labor.component';
 import { WarehouseComponent } from './components/warehouse/warehouse.component';
+import { ProductionPlanComponent } from './components/production-plan/production-plan.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'productionOrder', component: ProductionOrderComponent },
   { path: 'objectOfLabor', component: ObjectOfLaborComponent },
   { path: 'warehouse', component: WarehouseComponent },
+  { path: 'productionPlan', component: ProductionPlanComponent },
 ];
 
 @NgModule({

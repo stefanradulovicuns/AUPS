@@ -1,0 +1,122 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži planove proizvodnje" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getProductionPlans()">
+            <option [ngValue]="'ProductionPlanName'" selected>Naziv plana proizvodnje</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getProductionPlans()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Naziv plana proizvodnje</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let productionPlan of productionPlans" (click)="onClickRow(productionPlan)">
+            <td>{{ productionPlan.productionPlanName }}</td>
+            <td>
+                <button type="button" class="btn btn-primary"
+                    (click)="onClickUpdate($event, productionPlan)">Izmeni</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onClickDelete($event, productionPlan)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="productionPlansTotalCount" [collectionSize]="productionPlansTotalCount" [(page)]="page"
+        [pageSize]="count" (pageChange)="getProductionPlans()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getProductionPlans()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o planu proizvodnje</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi plan proizvodnje</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o planu proizvodnje
+        </h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o planu
+            proizvodnje</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="productionPlanName" [class.text-danger]="formGroup.get('productionPlanName')?.invalid && 
+                (formGroup.get('productionPlanName')?.dirty ||
+                formGroup.get('productionPlanName')?.touched ||
+                isSubmitted)">Naziv plana proizvodnje</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('productionPlanName')?.invalid && 
+                (formGroup.get('productionPlanName')?.dirty ||
+                formGroup.get('productionPlanName')?.touched ||
+                isSubmitted)" id="productionPlanName" placeholder="Unesite naziv plana proizvodnje"
+                    formControlName="productionPlanName">
+                <span *ngIf="formGroup.get('productionPlanName')?.hasError('required') && 
+                (formGroup.get('productionPlanName')?.dirty ||
+                formGroup.get('productionPlanName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="description">Opis</label>
+                <textarea type="text" class="form-control" id="description" placeholder="Unesite opis"
+                    formControlName="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="objectOfLaborId" [class.text-danger]="formGroup.get('objectOfLaborId')?.invalid && 
+                (formGroup.get('objectOfLaborId')?.dirty ||
+                formGroup.get('objectOfLaborId')?.touched ||
+                isSubmitted)">Predmet rada</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
+                (formGroup.get('objectOfLaborId')?.dirty ||
+                formGroup.get('objectOfLaborId')?.touched ||
+                isSubmitted)" id="objectOfLaborId" placeholder="Unesite predmet rada"
+                    formControlName="objectOfLaborId">
+                <span *ngIf="formGroup.get('objectOfLaborId')?.hasError('required') && 
+                (formGroup.get('objectOfLaborId')?.dirty ||
+                formGroup.get('objectOfLaborId')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteProductionPlan(formGroup.get('productionPlanId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
