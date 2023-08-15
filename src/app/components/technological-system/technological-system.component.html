@@ -1,0 +1,102 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži tehnološke sisteme" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getTechnologicalSystems()">
+            <option [ngValue]="'TechnologicalSystemName'" selected>Naziv tehnološkog sistema</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getTechnologicalSystems()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Naziv tehnološkog sistema</th>>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let technologicalSystem of technologicalSystems" (click)="onClickRow(technologicalSystem)">
+            <td>{{ technologicalSystem.technologicalSystemName }}</td>
+            <td>
+                <button type="button" class="btn btn-primary"
+                    (click)="onClickUpdate($event, technologicalSystem)">Izmeni</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onClickDelete($event, technologicalSystem)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="technologicalSystemsTotalCount" [collectionSize]="technologicalSystemsTotalCount"
+        [(page)]="page" [pageSize]="count" (pageChange)="getTechnologicalSystems()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getTechnologicalSystems()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o tehnološkom sistemu</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi tehnološki sistem</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o tehnološkom
+            sistemu</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o tehnološkom
+            sistemu</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="technologicalSystemName" [class.text-danger]="formGroup.get('technologicalSystemName')?.invalid && 
+                (formGroup.get('technologicalSystemName')?.dirty ||
+                formGroup.get('technologicalSystemName')?.touched ||
+                isSubmitted)">Naziv tehnološkog sistema</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('technologicalSystemName')?.invalid && 
+                (formGroup.get('technologicalSystemName')?.dirty ||
+                formGroup.get('technologicalSystemName')?.touched ||
+                isSubmitted)" id="technologicalSystemName" placeholder="Unesite naziv tehnološkog sistema"
+                    formControlName="firstName">
+                <span *ngIf="formGroup.get('technologicalSystemName')?.hasError('required') && 
+                (formGroup.get('technologicalSystemName')?.dirty ||
+                formGroup.get('technologicalSystemName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteTechnologicalSystem(formGroup.get('TechnologicalSystemId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
