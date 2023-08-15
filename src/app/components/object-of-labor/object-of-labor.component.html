@@ -1,0 +1,155 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži predmete rada" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getObjectOfLabors()">
+            <option [ngValue]="'ObjectOfLaborName'" selected>Naziv predmeta rada</option>
+            <option [ngValue]="'Price'">Cena</option>
+            <option [ngValue]="'StockQuantity'">Količina na skladištu</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getObjectOfLabors()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Naziv predmeta rada</th>
+            <th scope="col">Cena</th>
+            <th scope="col">Količina na skladištu</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let objectOfLabor of objectOfLabors" (click)="onClickRow(objectOfLabor)">
+            <td>{{ objectOfLabor.objectOfLaborName }}</td>
+            <td>{{ objectOfLabor.price }}</td>
+            <td>{{ objectOfLabor.stockQuantity }}</td>
+            <td>
+                <button type="button" class="btn btn-primary"
+                    (click)="onClickUpdate($event, objectOfLabor)">Izmeni</button>
+                <button type="button" class="btn btn-danger"
+                    (click)="onClickDelete($event, objectOfLabor)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="objectOfLaborsTotalCount" [collectionSize]="objectOfLaborsTotalCount" [(page)]="page"
+        [pageSize]="count" (pageChange)="getObjectOfLabors()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getObjectOfLabors()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o predmetu rada</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi predmet rada</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o predmetu rada</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o predmetu rada
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="objectOfLaborName" [class.text-danger]="formGroup.get('objectOfLaborName')?.invalid && 
+                (formGroup.get('objectOfLaborName')?.dirty ||
+                formGroup.get('objectOfLaborName')?.touched ||
+                isSubmitted)">Naziv predmeta rada</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('objectOfLaborName')?.invalid && 
+                (formGroup.get('objectOfLaborName')?.dirty ||
+                formGroup.get('objectOfLaborName')?.touched ||
+                isSubmitted)" id="objectOfLaborName" placeholder="Unesite naziv predmeta rada"
+                    formControlName="objectOfLaborName">
+                <span *ngIf="formGroup.get('objectOfLaborName')?.hasError('required') && 
+                (formGroup.get('objectOfLaborName')?.dirty ||
+                formGroup.get('objectOfLaborName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="description">Opis</label>
+                <textarea type="text" class="form-control" id="description" placeholder="Unesite opis"
+                    formControlName="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="price" [class.text-danger]="formGroup.get('price')?.invalid && 
+                (formGroup.get('price')?.dirty ||
+                formGroup.get('price')?.touched ||
+                isSubmitted)">Cena</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('price')?.invalid && 
+                (formGroup.get('price')?.dirty ||
+                formGroup.get('price')?.touched ||
+                isSubmitted)" id="price" placeholder="Unesite cenu" formControlName="price">
+                <span *ngIf="formGroup.get('price')?.hasError('required') && 
+                (formGroup.get('price')?.dirty ||
+                formGroup.get('price')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="stockQuantity" [class.text-danger]="formGroup.get('stockQuantity')?.invalid && 
+                (formGroup.get('stockQuantity')?.dirty ||
+                formGroup.get('stockQuantity')?.touched ||
+                isSubmitted)">Količina na skladištu</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('stockQuantity')?.invalid && 
+                (formGroup.get('stockQuantity')?.dirty ||
+                formGroup.get('stockQuantity')?.touched ||
+                isSubmitted)" id="stockQuantity" placeholder="Unesite količina na skladištu"
+                    formControlName="stockQuantity">
+                <span *ngIf="formGroup.get('stockQuantity')?.hasError('required') && 
+                (formGroup.get('stockQuantity')?.dirty ||
+                formGroup.get('stockQuantity')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="warehouse" [class.text-danger]="formGroup.get('warehouseId')?.invalid && 
+                (formGroup.get('warehouseId')?.dirty ||
+                formGroup.get('warehouseId')?.touched ||
+                isSubmitted)">Skladište</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('warehouseId')?.invalid && 
+                (formGroup.get('warehouseId')?.dirty ||
+                formGroup.get('warehouseId')?.touched ||
+                isSubmitted)" id="warehouse" placeholder="Unesite skladište" formControlName="warehouseId">
+                <span *ngIf="formGroup.get('warehouseId')?.hasError('required') && 
+                (formGroup.get('warehouseId')?.dirty ||
+                formGroup.get('workpwarehouseIdlaceId')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteObjectOfLabor(formGroup.get('objectOfLaborId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

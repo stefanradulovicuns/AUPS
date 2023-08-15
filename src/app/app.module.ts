@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkplaceComponent } from './components/workplace/workplace.component';
 import { OrganizationalUnitComponent } from './components/organizational-unit/organizational-unit.component';
 import { ProductionOrderComponent } from './components/production-order/production-order.component';
+import { ObjectOfLaborComponent } from './components/object-of-labor/object-of-labor.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ProductionOrderComponent } from './components/production-order/producti
     WorkplaceComponent,
     OrganizationalUnitComponent,
     ProductionOrderComponent,
+    ObjectOfLaborComponent,
   ],
   imports: [
     BrowserModule,
