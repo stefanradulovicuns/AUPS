@@ -1,0 +1,131 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži skladišta" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getWarehouses()">
+            <option [ngValue]="'City'" selected>Grad</option>
+            <option [ngValue]="'Address'">Adresa</option>
+            <option [ngValue]="'Capacity'">Kapacitet</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getWarehouses()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Grad</th>
+            <th scope="col">Adresa</th>
+            <th scope="col">Kapacitet</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let warehouse of warehouses" (click)="onClickRow(warehouse)">
+            <td>{{ warehouse.city }}</td>
+            <td>{{ warehouse.address }}</td>
+            <td>{{ warehouse.capacity }}</td>
+            <td>
+                <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, warehouse)">Izmeni</button>
+                <button type="button" class="btn btn-danger" (click)="onClickDelete($event, warehouse)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="warehousesTotalCount" [collectionSize]="warehousesTotalCount" [(page)]="page"
+        [pageSize]="count" (pageChange)="getWarehouses()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+        (ngModelChange)="getWarehouses()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o skladištu</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novo skladište</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o skladištu</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o skladištu</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="city" [class.text-danger]="formGroup.get('city')?.invalid && 
+                (formGroup.get('city')?.dirty ||
+                formGroup.get('city')?.touched ||
+                isSubmitted)">Grad</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('city')?.invalid && 
+                (formGroup.get('city')?.dirty ||
+                formGroup.get('city')?.touched ||
+                isSubmitted)" id="city" placeholder="Unesite grad" formControlName="city">
+                <span *ngIf="formGroup.get('city')?.hasError('required') && 
+                (formGroup.get('city')?.dirty ||
+                formGroup.get('city')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="address" [class.text-danger]="formGroup.get('address')?.invalid && 
+                (formGroup.get('address')?.dirty ||
+                formGroup.get('address')?.touched ||
+                isSubmitted)">Adresa</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('address')?.invalid && 
+                (formGroup.get('address')?.dirty ||
+                formGroup.get('address')?.touched ||
+                isSubmitted)" id="address" placeholder="Unesite adresu" formControlName="address">
+                <span *ngIf="formGroup.get('address')?.hasError('required') && 
+                (formGroup.get('address')?.dirty ||
+                formGroup.get('address')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="capacity" [class.text-danger]="formGroup.get('capacity')?.invalid && 
+                (formGroup.get('capacity')?.dirty ||
+                formGroup.get('capacity')?.touched ||
+                isSubmitted)">Kapacitet</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('capacity')?.invalid && 
+                (formGroup.get('capacity')?.dirty ||
+                formGroup.get('capacity')?.touched ||
+                isSubmitted)" id="capacity" placeholder="Unesite kapacitet" formControlName="capacity">
+                <span *ngIf="formGroup.get('capacity')?.hasError('required') && 
+                (formGroup.get('capacity')?.dirty ||
+                formGroup.get('capacity')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteWarehouse(formGroup.get('warehouseId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

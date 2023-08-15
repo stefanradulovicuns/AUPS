@@ -11,6 +11,7 @@ import { WorkplaceComponent } from './components/workplace/workplace.component';
 import { OrganizationalUnitComponent } from './components/organizational-unit/organizational-unit.component';
 import { ProductionOrderComponent } from './components/production-order/production-order.component';
 import { ObjectOfLaborComponent } from './components/object-of-labor/object-of-labor.component';
+import { WarehouseComponent } from './components/warehouse/warehouse.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ObjectOfLaborComponent } from './components/object-of-labor/object-of-l
     OrganizationalUnitComponent,
     ProductionOrderComponent,
     ObjectOfLaborComponent,
+    WarehouseComponent,
   ],
   imports: [
     BrowserModule,
