@@ -13,6 +13,7 @@ import { ProductionOrderComponent } from './components/production-order/producti
 import { ObjectOfLaborComponent } from './components/object-of-labor/object-of-labor.component';
 import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { ProductionPlanComponent } from './components/production-plan/production-plan.component';
+import { PlantComponent } from './components/plant/plant.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ProductionPlanComponent } from './components/production-plan/production
     ObjectOfLaborComponent,
     WarehouseComponent,
     ProductionPlanComponent,
+    PlantComponent,
   ],
   imports: [
     BrowserModule,

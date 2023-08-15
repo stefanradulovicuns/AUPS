@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-md-3">
+        <label for="search">Pretraga</label>
+        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
+            placeholder="Pretraži pogone" />
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Sortiraj prema</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getPlants()">
+            <option [ngValue]="'PlantName'" selected>Naziv pogona</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="sortBy">Redosled sortiranja</label>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getPlants()">
+            <option [ngValue]="'ASC'" selected>Rastuće</option>
+            <option [ngValue]="'DESC'">Opadajuće</option>
+        </select>
+    </div>
+</div>
+
+<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Naziv pogona</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let plant of plants" (click)="onClickRow(plant)">
+            <td>{{ plant.plantName }}</td>
+            <td>
+                <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, plant)">Izmeni</button>
+                <button type="button" class="btn btn-danger" (click)="onClickDelete($event, plant)">Obriši</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+    <ngb-pagination *ngIf="plantsTotalCount" [collectionSize]="plantsTotalCount" [(page)]="page" [pageSize]="count"
+        (pageChange)="getPlants()">
+    </ngb-pagination>
+
+    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count" (ngModelChange)="getPlants()">
+        <option [ngValue]="2">2 stavke po strani</option>
+        <option [ngValue]="5">5 stavki po strani</option>
+        <option [ngValue]="10">10 stavki po strani</option>
+    </select>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o pogonu</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi pogon</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o pogonu</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o pogonu</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="plantName" [class.text-danger]="formGroup.get('plantName')?.invalid && 
+                (formGroup.get('plantName')?.dirty ||
+                formGroup.get('plantName')?.touched ||
+                isSubmitted)">Naziv pogona</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('plantName')?.invalid && 
+                (formGroup.get('plantName')?.dirty ||
+                formGroup.get('plantName')?.touched ||
+                isSubmitted)" id="plantName" placeholder="Unesite naziv pogona" formControlName="plantName">
+                <span *ngIf="formGroup.get('plantName')?.hasError('required') && 
+                (formGroup.get('plantName')?.dirty ||
+                formGroup.get('plantName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deletePlant(formGroup.get('plantId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<hr />
+
+<pre>{{ closeResult }}</pre>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

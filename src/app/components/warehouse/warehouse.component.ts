@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Warehouse } from 'src/app/models/warehouse';
@@ -9,7 +9,7 @@ import { WarehouseService } from 'src/app/services/warehouse.service';
   templateUrl: './warehouse.component.html',
   styleUrls: ['./warehouse.component.css']
 })
-export class WarehouseComponent {
+export class WarehouseComponent implements OnInit {
 
   @ViewChild('content') modal!: ElementRef;
 

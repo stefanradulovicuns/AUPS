@@ -7,6 +7,7 @@ import { ProductionOrderComponent } from './components/production-order/producti
 import { ObjectOfLaborComponent } from './components/object-of-labor/object-of-labor.component';
 import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { ProductionPlanComponent } from './components/production-plan/production-plan.component';
+import { PlantComponent } from './components/plant/plant.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'objectOfLabor', component: ObjectOfLaborComponent },
   { path: 'warehouse', component: WarehouseComponent },
   { path: 'productionPlan', component: ProductionPlanComponent },
+  { path: 'plant', component: PlantComponent },
 ];
 
 @NgModule({

@@ -1,24 +1,24 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ProductionPlan } from 'src/app/models/productionPlan';
-import { ProductionPlanService } from 'src/app/services/production-plan.service';
+import { Plant } from 'src/app/models/plant';
+import { PlantService } from 'src/app/services/plant.service';
 
 @Component({
-  selector: 'app-production-plan',
-  templateUrl: './production-plan.component.html',
-  styleUrls: ['./production-plan.component.css']
+  selector: 'app-plant',
+  templateUrl: './plant.component.html',
+  styleUrls: ['./plant.component.css']
 })
-export class ProductionPlanComponent implements OnInit {
+export class PlantComponent implements OnInit {
 
   @ViewChild('content') modal!: ElementRef;
 
   modalReference!: NgbModalRef;
 
-  productionPlans: ProductionPlan[] | null = null;
-  productionPlansTotalCount: number | null = null;
+  plants: Plant[] | null = null;
+  plantsTotalCount: number | null = null;
   search: string = '';
-  sortBy: string = 'ProductionPlanName';
+  sortBy: string = 'PlantName';
   sortOrder: string = 'ASC';
   page: number = 1;
   count: number = 2;
@@ -27,10 +27,8 @@ export class ProductionPlanComponent implements OnInit {
   closeResult = ''
 
   formGroup: FormGroup = this.fb.group({
-    productionPlanId: [''],
-    productionPlanName: ['', Validators.required],
-    description: ['', Validators.required],
-    objectOfLaborId: ['', Validators.required]
+    plantId: [''],
+    plantName: ['', Validators.required]
   });
   isSubmitted: boolean = false;
   operation: string | null = null;
@@ -38,20 +36,20 @@ export class ProductionPlanComponent implements OnInit {
   toastMessage: string | null = null;
   isError: boolean = false;
 
-  constructor(private productionPlanService: ProductionPlanService,
+  constructor(private plantService: PlantService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.getProductionPlans();
+    this.getPlants();
   }
 
-  getProductionPlans() {
+  getPlants() {
     this.isLoading = true;
-    this.productionPlanService.getProductionPlans(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
+    this.plantService.getPlants(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
       next: (data) => {
-        this.productionPlans = data;
-        this.productionPlansTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
+        this.plants = data;
+        this.plantsTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
       },
 
       error: (error) => {
@@ -66,12 +64,12 @@ export class ProductionPlanComponent implements OnInit {
     });
   }
 
-  createProductionPlan(productionPlan: ProductionPlan) {
-    this.productionPlanService.createProductionPlan(productionPlan).subscribe({
+  createPlant(Plant: Plant) {
+    this.plantService.createPlant(Plant).subscribe({
       next: () => {
-        this.getProductionPlans();
+        this.getPlants();
         this.modalReference?.close();
-        this.toastMessage = 'Uspešno dodat novi plan proizvodnje';
+        this.toastMessage = 'Uspešno dodat novi pogon';
       },
 
       error: (error) => {
@@ -84,10 +82,10 @@ export class ProductionPlanComponent implements OnInit {
     });
   }
 
-  updateProductionPlan(productionPlan: ProductionPlan) {
-    this.productionPlanService.updateProductionPlan(productionPlan).subscribe({
+  updatePlant(Plant: Plant) {
+    this.plantService.updatePlant(Plant).subscribe({
       next: () => {
-        this.getProductionPlans();
+        this.getPlants();
         this.modalReference?.close();
         this.toastMessage = 'Uspešno izmenjeni podaci';
       },
@@ -102,12 +100,12 @@ export class ProductionPlanComponent implements OnInit {
     });
   }
 
-  deleteProductionPlan(id: string) {
-    this.productionPlanService.deleteProductionPlan(id).subscribe({
+  deletePlant(id: string) {
+    this.plantService.deletePlant(id).subscribe({
       next: () => {
-        this.getProductionPlans();
+        this.getPlants();
         this.modalReference?.close();
-        this.toastMessage = 'Plan proizvodnje je uspešno obrisan';
+        this.toastMessage = 'Pogon je uspešno obrisan';
       },
 
       error: (error) => {
@@ -145,12 +143,12 @@ export class ProductionPlanComponent implements OnInit {
 
   onInputSearch() {
     this.page = 1;
-    this.getProductionPlans();
+    this.getPlants();
   }
 
-  onClickRow(productionPlan: ProductionPlan) {
-    const { totalCount, ...productionPlanData } = productionPlan;
-    this.formGroup.setValue({ ...productionPlanData });
+  onClickRow(plant: Plant) {
+    const { totalCount, ...plantData } = plant;
+    this.formGroup.setValue({ ...plantData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
     this.open(this.modal);
@@ -163,19 +161,19 @@ export class ProductionPlanComponent implements OnInit {
     this.open(this.modal);
   }
 
-  onClickUpdate(event: Event, productionPlan: ProductionPlan) {
+  onClickUpdate(event: Event, plant: Plant) {
     event.stopPropagation();
-    const { totalCount, ...productionPlanData } = productionPlan;
-    this.formGroup.setValue({ ...productionPlanData });
+    const { totalCount, ...plantData } = plant;
+    this.formGroup.setValue({ ...plantData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
     this.open(this.modal);
   }
 
-  onClickDelete(event: Event, productionPlan: ProductionPlan) {
+  onClickDelete(event: Event, plant: Plant) {
     event.stopPropagation();
-    const { totalCount, ...productionPlanData } = productionPlan;
-    this.formGroup.setValue({ ...productionPlanData });
+    const { totalCount, ...plantData } = plant;
+    this.formGroup.setValue({ ...plantData });
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);
@@ -185,11 +183,11 @@ export class ProductionPlanComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.formGroup.valid) {
-      const productionPlan = Object.assign(this.formGroup.value);
+      const Plant = Object.assign(this.formGroup.value);
       if (this.operation === 'CREATE') {
-        this.createProductionPlan(productionPlan);
+        this.createPlant(Plant);
       } else if (this.operation === 'UPDATE') {
-        this.updateProductionPlan(productionPlan);
+        this.updatePlant(Plant);
       }
     }
   }
