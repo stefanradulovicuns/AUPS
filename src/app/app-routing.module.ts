@@ -9,6 +9,7 @@ import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { ProductionPlanComponent } from './components/production-plan/production-plan.component';
 import { PlantComponent } from './components/plant/plant.component';
 import { TechnologicalSystemComponent } from './components/technological-system/technological-system.component';
+import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'productionPlan', component: ProductionPlanComponent },
   { path: 'plant', component: PlantComponent },
   { path: 'technologicalSystem', component: TechnologicalSystemComponent },
+  { path: 'technologicalProcedure', component: TechnologicalProcedureComponent },
 ];
 
 @NgModule({

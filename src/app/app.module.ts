@@ -15,6 +15,7 @@ import { WarehouseComponent } from './components/warehouse/warehouse.component';
 import { ProductionPlanComponent } from './components/production-plan/production-plan.component';
 import { PlantComponent } from './components/plant/plant.component';
 import { TechnologicalSystemComponent } from './components/technological-system/technological-system.component';
+import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { TechnologicalSystemComponent } from './components/technological-system/
     ProductionPlanComponent,
     PlantComponent,
     TechnologicalSystemComponent,
+    TechnologicalProcedureComponent,
   ],
   imports: [
     BrowserModule,
