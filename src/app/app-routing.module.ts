@@ -10,6 +10,7 @@ import { ProductionPlanComponent } from './components/production-plan/production
 import { PlantComponent } from './components/plant/plant.component';
 import { TechnologicalSystemComponent } from './components/technological-system/technological-system.component';
 import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
+import { ObjectOfLaborTechnologicalProcedureComponent } from './components/object-of-labor-technological-procedure/object-of-labor-technological-procedure.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'plant', component: PlantComponent },
   { path: 'technologicalSystem', component: TechnologicalSystemComponent },
   { path: 'technologicalProcedure', component: TechnologicalProcedureComponent },
+  { path: 'objectOfLaborTechnologicalProcedure', component: ObjectOfLaborTechnologicalProcedureComponent },
 ];
 
 @NgModule({

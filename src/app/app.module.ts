@@ -16,6 +16,7 @@ import { ProductionPlanComponent } from './components/production-plan/production
 import { PlantComponent } from './components/plant/plant.component';
 import { TechnologicalSystemComponent } from './components/technological-system/technological-system.component';
 import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
+import { ObjectOfLaborTechnologicalProcedureComponent } from './components/object-of-labor-technological-procedure/object-of-labor-technological-procedure.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { TechnologicalProcedureComponent } from './components/technological-proc
     PlantComponent,
     TechnologicalSystemComponent,
     TechnologicalProcedureComponent,
+    ObjectOfLaborTechnologicalProcedureComponent,
   ],
   imports: [
     BrowserModule,
