@@ -2,7 +2,11 @@ import { Component, ElementRef, OnInit, QueryList, TemplateRef, ViewChild, ViewC
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Employee } from 'src/app/models/employee';
+import { OrganizationalUnit } from 'src/app/models/organizationalUnit';
+import { Workplace } from 'src/app/models/workplace';
 import { EmployeeService } from 'src/app/services/employee.service';
+import { OrganizationalUnitService } from 'src/app/services/organizational-unit.service';
+import { WorkplaceService } from 'src/app/services/workplace.service';
 
 @Component({
   selector: 'app-employee',
@@ -44,15 +48,22 @@ export class EmployeeComponent implements OnInit {
   isSubmitted: boolean = false;
   operation: string | null = null;
 
+  workplaces: Workplace[] | null = null;
+  organizationalUnits: OrganizationalUnit[] | null = null;
+
   toastMessage: string | null = null;
   isError: boolean = false;
 
   constructor(private employeeService: EmployeeService,
+    private workplaceService: WorkplaceService,
+    private organizationalUnitService: OrganizationalUnitService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getEmployees();
+    this.getWorkplaces();
+    this.getOrganizationalUnits();
   }
 
   getEmployees() {
@@ -117,6 +128,38 @@ export class EmployeeComponent implements OnInit {
         this.getEmployees();
         this.modalReference?.close();
         this.toastMessage = 'Radnik je uspešno obrisan';
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getWorkplaces() {
+    this.workplaceService.getWorkplaces('', 'WorkplaceName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.workplaces = data;
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getOrganizationalUnits() {
+    this.organizationalUnitService.getOrganizationalUnits('', 'OrganizationalUnitName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.organizationalUnits = data;
       },
 
       error: (error) => {
