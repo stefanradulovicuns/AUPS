@@ -11,20 +11,25 @@ import { PlantComponent } from './components/plant/plant.component';
 import { TechnologicalSystemComponent } from './components/technological-system/technological-system.component';
 import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
 import { ObjectOfLaborTechnologicalProcedureComponent } from './components/object-of-labor-technological-procedure/object-of-labor-technological-procedure.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
-  { path: 'employee', component: EmployeeComponent },
-  { path: 'workplace', component: WorkplaceComponent },
-  { path: 'organizationalUnit', component: OrganizationalUnitComponent },
-  { path: 'productionOrder', component: ProductionOrderComponent },
-  { path: 'objectOfLabor', component: ObjectOfLaborComponent },
-  { path: 'warehouse', component: WarehouseComponent },
-  { path: 'productionPlan', component: ProductionPlanComponent },
-  { path: 'plant', component: PlantComponent },
-  { path: 'technologicalSystem', component: TechnologicalSystemComponent },
-  { path: 'technologicalProcedure', component: TechnologicalProcedureComponent },
-  { path: 'objectOfLaborTechnologicalProcedure', component: ObjectOfLaborTechnologicalProcedureComponent },
+  {
+    path: '', component: NavigationComponent, children: [
+      { path: 'employee', component: EmployeeComponent },
+      { path: 'workplace', component: WorkplaceComponent },
+      { path: 'organizationalUnit', component: OrganizationalUnitComponent },
+      { path: 'productionOrder', component: ProductionOrderComponent },
+      { path: 'objectOfLabor', component: ObjectOfLaborComponent },
+      { path: 'warehouse', component: WarehouseComponent },
+      { path: 'productionPlan', component: ProductionPlanComponent },
+      { path: 'plant', component: PlantComponent },
+      { path: 'technologicalSystem', component: TechnologicalSystemComponent },
+      { path: 'technologicalProcedure', component: TechnologicalProcedureComponent },
+      { path: 'objectOfLaborTechnologicalProcedure', component: ObjectOfLaborTechnologicalProcedureComponent },
+    ]
+  },
 ];
 
 @NgModule({

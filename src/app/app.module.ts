@@ -17,7 +17,7 @@ import { PlantComponent } from './components/plant/plant.component';
 import { TechnologicalSystemComponent } from './components/technological-system/technological-system.component';
 import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
 import { ObjectOfLaborTechnologicalProcedureComponent } from './components/object-of-labor-technological-procedure/object-of-labor-technological-procedure.component';
-import { NavigationComponent } from './compontents/navigation/navigation.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 @NgModule({
   declarations: [
