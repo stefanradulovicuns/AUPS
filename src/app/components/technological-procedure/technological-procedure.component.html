@@ -101,44 +101,55 @@
                 isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="organizationalUnit" [class.text-danger]="formGroup.get('organizationalUnitId')?.invalid && 
+                <label for="organizationalUnitId" [class.text-danger]="formGroup.get('organizationalUnitId')?.invalid && 
                 (formGroup.get('organizationalUnitId')?.dirty ||
                 formGroup.get('organizationalUnitId')?.touched ||
                 isSubmitted)">Organizaciona jedinica</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('organizationalUnitId')?.invalid && 
+                <select class="form-select" [class.is-invalid]="formGroup.get('organizationalUnitId')?.invalid && 
                 (formGroup.get('organizationalUnitId')?.dirty ||
                 formGroup.get('organizationalUnitId')?.touched ||
-                isSubmitted)" id="organizationalUnit" placeholder="Unesite organizacionu jedinicu"
+                isSubmitted)" id="organizationalUnitId" placeholder="Unesite organizacionu jedinicu"
                     formControlName="organizationalUnitId">
+                    <option *ngFor="let organizationalUnit of organizationalUnits"
+                        [value]="organizationalUnit.organizationalUnitId">{{
+                        organizationalUnit.organizationalUnitName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('organizationalUnitId')?.hasError('required') && 
-                (formGroup.get('organizationalUnitId')?.dirty ||
-                formGroup.get('organizationalUnitId')?.touched ||
-                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+                    (formGroup.get('organizationalUnitId')?.dirty ||
+                    formGroup.get('organizationalUnitId')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="plant" [class.text-danger]="formGroup.get('plantId')?.invalid && 
+                <label for="plantId" [class.text-danger]="formGroup.get('plantId')?.invalid && 
                 (formGroup.get('plantId')?.dirty ||
                 formGroup.get('plantId')?.touched ||
                 isSubmitted)">Pogon</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('plantId')?.invalid && 
+                <select type="text" class="form-select" [class.is-invalid]="formGroup.get('plantId')?.invalid && 
                 (formGroup.get('plantId')?.dirty ||
                 formGroup.get('plantId')?.touched ||
-                isSubmitted)" id="plant" placeholder="Unesite pogon" formControlName="plantId">
+                isSubmitted)" id="plantId" placeholder="Unesite pogon" formControlName="plantId">
+                    <option *ngFor="let plant of plants" [value]="plant.plantId">{{
+                        plant.plantName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('plantId')?.hasError('required') && 
                     (formGroup.get('plantId')?.dirty ||
                     formGroup.get('plantId')?.touched ||
                     isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="technologicalSystem" [class.text-danger]="formGroup.get('technologicalSystemId')?.invalid && 
+                <label for="technologicalSystemId" [class.text-danger]="formGroup.get('technologicalSystemId')?.invalid && 
                 (formGroup.get('technologicalSystemId')?.dirty ||
                 formGroup.get('technologicalSystemId')?.touched ||
                 isSubmitted)">Tehnološki sistem</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('technologicalSystemId')?.invalid && 
+                <select type="text" class="form-select" [class.is-invalid]="formGroup.get('technologicalSystemId')?.invalid && 
                 (formGroup.get('technologicalSystemId')?.dirty ||
                 formGroup.get('technologicalSystemId')?.touched ||
-                isSubmitted)" id="technologicalSystem" placeholder="Unesite tehnološki sistem"
+                isSubmitted)" id="technologicalSystemId" placeholder="Unesite tehnološki sistem"
                     formControlName="technologicalSystemId">
+                    <option *ngFor="let technologicalSystem of technologicalSystems"
+                        [value]="technologicalSystem.technologicalSystemId">{{
+                        technologicalSystem.technologicalSystemName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('technologicalSystemId')?.hasError('required') && 
                     (formGroup.get('technologicalSystemId')?.dirty ||
                     formGroup.get('technologicalSystemId')?.touched ||

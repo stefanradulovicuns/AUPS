@@ -126,10 +126,13 @@
                     (formGroup.get('employeeId')?.dirty ||
                     formGroup.get('employeeId')?.touched ||
                     isSubmitted)">Employee</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('employeeId')?.invalid && 
+                <select type="text" class="form-select" [class.is-invalid]="formGroup.get('employeeId')?.invalid && 
                     (formGroup.get('employeeId')?.dirty ||
                     formGroup.get('employeeId')?.touched ||
                     isSubmitted)" id="employeeId" placeholder="Unesite radnika" formControlName="employeeId">
+                    <option *ngFor="let employee of employees" [value]="employee.employeeId">{{
+                        employee.firstName }} {{ employee.lastName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('employeeId')?.hasError('required') && 
                     (formGroup.get('employeeId')?.dirty ||
                     formGroup.get('employeeId')?.touched ||
@@ -140,11 +143,14 @@
                     (formGroup.get('objectOfLaborId')?.dirty ||
                     formGroup.get('objectOfLaborId')?.touched ||
                     isSubmitted)">Object of labor</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
+                <select class="form-select" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
                     (formGroup.get('objectOfLaborId')?.dirty ||
                     formGroup.get('objectOfLaborId')?.touched ||
                     isSubmitted)" id="objectOfLaborId" placeholder="Unesite predmet rada"
                     formControlName="objectOfLaborId">
+                    <option *ngFor="let objectOfLabor of objectOfLabors" [value]="objectOfLabor.objectOfLaborId">{{
+                        objectOfLabor.objectOfLaborName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('objectOfLaborId')?.hasError('required') && 
                     (formGroup.get('objectOfLaborId')?.dirty ||
                     formGroup.get('objectOfLaborId')?.touched ||

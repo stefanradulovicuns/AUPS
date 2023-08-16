@@ -1,8 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { OrganizationalUnit } from 'src/app/models/organizationalUnit';
+import { Plant } from 'src/app/models/plant';
 import { TechnologicalProcedure } from 'src/app/models/technologicalProcedure';
+import { TechnologicalSystem } from 'src/app/models/technologicalSystem';
+import { OrganizationalUnitService } from 'src/app/services/organizational-unit.service';
+import { PlantService } from 'src/app/services/plant.service';
 import { TechnologicalProcedureService } from 'src/app/services/technological-procedure.service';
+import { TechnologicalSystemService } from 'src/app/services/technological-system.service';
 
 @Component({
   selector: 'app-technological-procedure',
@@ -37,15 +43,25 @@ export class TechnologicalProcedureComponent {
   isSubmitted: boolean = false;
   operation: string | null = null;
 
+  organizationalUnits: OrganizationalUnit[] | null = null;
+  plants: Plant[] | null = null;
+  technologicalSystems: TechnologicalSystem[] | null = null;
+
   toastMessage: string | null = null;
   isError: boolean = false;
 
   constructor(private technologicalProcedureService: TechnologicalProcedureService,
+    private organizationalUnitService: OrganizationalUnitService,
+    private plantService: PlantService,
+    private technologicalSystemService: TechnologicalSystemService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getTechnologicalProcedures();
+    this.getOrganizationalUnits();
+    this.getPlants();
+    this.getTechnologicalSystems();
   }
 
   getTechnologicalProcedures() {
@@ -110,6 +126,54 @@ export class TechnologicalProcedureComponent {
         this.getTechnologicalProcedures();
         this.modalReference?.close();
         this.toastMessage = 'Tehnološki postupak je uspešno obrisan';
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getOrganizationalUnits() {
+    this.organizationalUnitService.getOrganizationalUnits('', 'OrganizationalUnitName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.organizationalUnits = data;
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getPlants() {
+    this.plantService.getPlants('', 'PlantName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.plants = data;
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getTechnologicalSystems() {
+    this.technologicalSystemService.getTechnologicalSystems('', 'TechnologicalSystemName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.technologicalSystems = data;
       },
 
       error: (error) => {

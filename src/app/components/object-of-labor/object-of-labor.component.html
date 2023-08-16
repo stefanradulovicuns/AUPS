@@ -123,14 +123,17 @@
                 isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
-                <label for="warehouse" [class.text-danger]="formGroup.get('warehouseId')?.invalid && 
+                <label for="warehouseId" [class.text-danger]="formGroup.get('warehouseId')?.invalid && 
                 (formGroup.get('warehouseId')?.dirty ||
                 formGroup.get('warehouseId')?.touched ||
                 isSubmitted)">Skladište</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('warehouseId')?.invalid && 
+                <select class="form-select" [class.is-invalid]="formGroup.get('warehouseId')?.invalid && 
                 (formGroup.get('warehouseId')?.dirty ||
                 formGroup.get('warehouseId')?.touched ||
-                isSubmitted)" id="warehouse" placeholder="Unesite skladište" formControlName="warehouseId">
+                isSubmitted)" id="warehouseId" placeholder="Unesite skladište" formControlName="warehouseId">
+                    <option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouseId">{{ warehouse.city }},
+                        {{ warehouse.address }}</option>
+                </select>
                 <span *ngIf="formGroup.get('warehouseId')?.hasError('required') && 
                 (formGroup.get('warehouseId')?.dirty ||
                 formGroup.get('workpwarehouseIdlaceId')?.touched ||

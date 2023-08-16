@@ -2,7 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ObjectOfLabor } from 'src/app/models/objectOfLabor';
+import { Warehouse } from 'src/app/models/warehouse';
 import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
+import { WarehouseService } from 'src/app/services/warehouse.service';
 
 @Component({
   selector: 'app-object-of-labor',
@@ -37,15 +39,19 @@ export class ObjectOfLaborComponent implements OnInit {
   isSubmitted: boolean = false;
   operation: string | null = null;
 
+  warehouses: Warehouse[] | null = null;
+
   toastMessage: string | null = null;
   isError: boolean = false;
 
   constructor(private objectOfLaborService: ObjectOfLaborService,
+    private warehouseService: WarehouseService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getObjectOfLabors();
+    this.getWarehouses();
   }
 
   getObjectOfLabors() {
@@ -110,6 +116,22 @@ export class ObjectOfLaborComponent implements OnInit {
         this.getObjectOfLabors();
         this.modalReference?.close();
         this.toastMessage = 'Predmet rada je uspešno obrisan';
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getWarehouses() {
+    this.warehouseService.getWarehouses('', 'City', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.warehouses = data;
       },
 
       error: (error) => {

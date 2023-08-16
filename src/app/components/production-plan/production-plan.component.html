@@ -90,18 +90,21 @@
             </div>
             <div class="form-group">
                 <label for="objectOfLaborId" [class.text-danger]="formGroup.get('objectOfLaborId')?.invalid && 
-                (formGroup.get('objectOfLaborId')?.dirty ||
-                formGroup.get('objectOfLaborId')?.touched ||
-                isSubmitted)">Predmet rada</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
-                (formGroup.get('objectOfLaborId')?.dirty ||
-                formGroup.get('objectOfLaborId')?.touched ||
-                isSubmitted)" id="objectOfLaborId" placeholder="Unesite predmet rada"
+                    (formGroup.get('objectOfLaborId')?.dirty ||
+                    formGroup.get('objectOfLaborId')?.touched ||
+                    isSubmitted)">Object of labor</label>
+                <select class="form-select" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
+                    (formGroup.get('objectOfLaborId')?.dirty ||
+                    formGroup.get('objectOfLaborId')?.touched ||
+                    isSubmitted)" id="objectOfLaborId" placeholder="Unesite predmet rada"
                     formControlName="objectOfLaborId">
+                    <option *ngFor="let objectOfLabor of objectOfLabors" [value]="objectOfLabor.objectOfLaborId">{{
+                        objectOfLabor.objectOfLaborName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('objectOfLaborId')?.hasError('required') && 
-                (formGroup.get('objectOfLaborId')?.dirty ||
-                formGroup.get('objectOfLaborId')?.touched ||
-                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+                    (formGroup.get('objectOfLaborId')?.dirty ||
+                    formGroup.get('objectOfLaborId')?.touched ||
+                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
         </div>
         <div class="modal-footer">

@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ObjectOfLabor } from 'src/app/models/objectOfLabor';
 import { ProductionPlan } from 'src/app/models/productionPlan';
+import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
 import { ProductionPlanService } from 'src/app/services/production-plan.service';
 
 @Component({
@@ -35,15 +37,19 @@ export class ProductionPlanComponent implements OnInit {
   isSubmitted: boolean = false;
   operation: string | null = null;
 
+  objectOfLabors: ObjectOfLabor[] | null = null;
+
   toastMessage: string | null = null;
   isError: boolean = false;
 
   constructor(private productionPlanService: ProductionPlanService,
+    private objectOfLaborService: ObjectOfLaborService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getProductionPlans();
+    this.getObjectOfLabors();
   }
 
   getProductionPlans() {
@@ -108,6 +114,22 @@ export class ProductionPlanComponent implements OnInit {
         this.getProductionPlans();
         this.modalReference?.close();
         this.toastMessage = 'Plan proizvodnje je uspešno obrisan';
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getObjectOfLabors() {
+    this.objectOfLaborService.getObjectOfLabors('', 'ObjectOfLaborName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.objectOfLabors = data;
       },
 
       error: (error) => {

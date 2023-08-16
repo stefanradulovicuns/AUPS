@@ -1,7 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Employee } from 'src/app/models/employee';
+import { ObjectOfLabor } from 'src/app/models/objectOfLabor';
 import { ProductionOrder } from 'src/app/models/productionOrder';
+import { EmployeeService } from 'src/app/services/employee.service';
+import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
 import { ProductionOrderService } from 'src/app/services/production-order.service';
 
 @Component({
@@ -38,15 +42,22 @@ export class ProductionOrderComponent implements OnInit {
   isSubmitted: boolean = false;
   operation: string | null = null;
 
+  employees: Employee[] | null = null;
+  objectOfLabors: ObjectOfLabor[] | null = null;
+
   toastMessage: string | null = null;
   isError: boolean = false;
 
   constructor(private productionOrderService: ProductionOrderService,
+    private employeeService: EmployeeService,
+    private objectOfLaborService: ObjectOfLaborService,
     private modalService: NgbModal,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getProductionOrders();
+    this.getObjectOfLabors();
+    this.getEmployees();
   }
 
   getProductionOrders() {
@@ -111,6 +122,38 @@ export class ProductionOrderComponent implements OnInit {
         this.getProductionOrders();
         this.modalReference?.close();
         this.toastMessage = 'Nalog za proizvodnju je uspešno obrisan';
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getEmployees() {
+    this.employeeService.getEmployees('', 'FirstName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.employees = data;
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => { }
+    });
+  }
+
+  getObjectOfLabors() {
+    this.objectOfLaborService.getObjectOfLabors('', 'ObjectOfLaborName', 'ASC', 0, 0).subscribe({
+      next: (data) => {
+        this.objectOfLabors = data;
       },
 
       error: (error) => {
