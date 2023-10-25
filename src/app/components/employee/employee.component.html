@@ -120,7 +120,7 @@
                 <label for="password" [class.text-danger]="formGroup.get('password')?.invalid && 
                 (formGroup.get('password')?.dirty ||
                 formGroup.get('password')?.touched ||
-                isSubmitted)">Password</label>
+                isSubmitted)">Lozinka</label>
                 <input type="password" class="form-control" [class.is-invalid]="formGroup.get('password')?.invalid && 
                 (formGroup.get('password')?.dirty ||
                 formGroup.get('password')?.touched ||
@@ -128,6 +128,20 @@
                 <span *ngIf="formGroup.get('password')?.hasError('required') && 
                 (formGroup.get('password')?.dirty ||
                 formGroup.get('password')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword" [class.text-danger]="formGroup.get('confirmPassword')?.invalid && 
+                (formGroup.get('confirmPassword')?.dirty ||
+                formGroup.get('confirmPassword')?.touched ||
+                isSubmitted)">Potvrda lozinke</label>
+                <input type="password" class="form-control" [class.is-invalid]="formGroup.get('confirmPassword')?.invalid && 
+                (formGroup.get('confirmPassword')?.dirty ||
+                formGroup.get('confirmPassword')?.touched ||
+                isSubmitted)" id="confirmPassword" placeholder="Potvrda lozinke" formControlName="confirmPassword">
+                <span *ngIf="formGroup.get('confirmPassword')?.hasError('required') && 
+                (formGroup.get('confirmPassword')?.dirty ||
+                formGroup.get('confirmPassword')?.touched ||
                 isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">

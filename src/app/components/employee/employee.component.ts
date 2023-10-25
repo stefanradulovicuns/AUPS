@@ -36,6 +36,7 @@ export class EmployeeComponent implements OnInit {
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
+    confirmPassword: ['', Validators.required],
     jmbg: ['', Validators.required],
     phoneNumber: ['', Validators.required],
     address: ['', Validators.required],
@@ -218,7 +219,7 @@ export class EmployeeComponent implements OnInit {
   onClickUpdate(event: Event, employee: Employee) {
     event.stopPropagation();
     const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData });
+    this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
     this.formGroup.enable();
     this.operation = 'UPDATE';
     this.open(this.modal);
@@ -227,7 +228,7 @@ export class EmployeeComponent implements OnInit {
   onClickDelete(event: Event, employee: Employee) {
     event.stopPropagation();
     const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData });
+    this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);

@@ -1,0 +1,95 @@
+<form [formGroup]="formGroup" (submit)="onSubmitForm()">
+    <div class="form-group">
+        <label for="personName" [class.text-danger]="formGroup.get('personName')?.invalid && 
+        (formGroup.get('personName')?.dirty ||
+        formGroup.get('personName')?.touched ||
+        isSubmitted)">Korisničko ime</label>
+        <input type="text" class="form-control" [class.is-invalid]="formGroup.get('personName')?.invalid && 
+        (formGroup.get('personName')?.dirty ||
+        formGroup.get('personName')?.touched ||
+        isSubmitted)" id="personName" placeholder="Unesite korisničko ime" formControlName="personName">
+        <span *ngIf="formGroup.get('personName')?.hasError('required') && 
+        (formGroup.get('personName')?.dirty ||
+        formGroup.get('personName')?.touched ||
+        isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+    </div>
+    <div class="form-group">
+        <label for="email" [class.text-danger]="formGroup.get('email')?.invalid && 
+        (formGroup.get('email')?.dirty ||
+        formGroup.get('email')?.touched ||
+        isSubmitted)">Email</label>
+        <input type="email" class="form-control" [class.is-invalid]="formGroup.get('email')?.invalid && 
+        (formGroup.get('email')?.dirty ||
+        formGroup.get('email')?.touched ||
+        isSubmitted)" id="email" placeholder="Unesite email" formControlName="email">
+        <span *ngIf="formGroup.get('email')?.hasError('required') && 
+        (formGroup.get('email')?.dirty ||
+        formGroup.get('email')?.touched ||
+        isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+        <span *ngIf="formGroup.get('email')?.hasError('email') &&
+        (formGroup.get('email')?.dirty
+        || formGroup.get('email')?.touched
+        || isSubmitted)" class="text-danger">Email adresa mora biti u ispravnom formatu</span>
+    </div>
+    <div class="form-group">
+        <label for="phoneNumber" [class.text-danger]="formGroup.get('phoneNumber')?.invalid && 
+        (formGroup.get('phoneNumber')?.dirty ||
+        formGroup.get('phoneNumber')?.touched ||
+        isSubmitted)">Broj telefona</label>
+        <input type="text" class="form-control" [class.is-invalid]="formGroup.get('phoneNumber')?.invalid && 
+        (formGroup.get('phoneNumber')?.dirty ||
+        formGroup.get('phoneNumber')?.touched ||
+        isSubmitted)" id="phoneNumber" placeholder="Unesite broj telefona" formControlName="phoneNumber">
+        <span *ngIf="formGroup.get('phoneNumber')?.hasError('required') && 
+        (formGroup.get('phoneNumber')?.dirty ||
+        formGroup.get('phoneNumber')?.touched ||
+        isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+    </div>
+    <div class="form-group">
+        <label for="password" [class.text-danger]="formGroup.get('password')?.invalid && 
+        (formGroup.get('password')?.dirty ||
+        formGroup.get('password')?.touched ||
+        isSubmitted)">Lozinka</label>
+        <input type="password" class="form-control" [class.is-invalid]="formGroup.get('password')?.invalid && 
+        (formGroup.get('password')?.dirty ||
+        formGroup.get('password')?.touched ||
+        isSubmitted)" id="password" placeholder="Lozinka" formControlName="password">
+        <span *ngIf="formGroup.get('password')?.hasError('required') && 
+        (formGroup.get('password')?.dirty ||
+        formGroup.get('password')?.touched ||
+        isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+    </div>
+    <div class="form-group">
+        <label for="confirmPassword" [class.text-danger]="formGroup.get('confirmPassword')?.invalid && 
+        (formGroup.get('confirmPassword')?.dirty ||
+        formGroup.get('confirmPassword')?.touched ||
+        isSubmitted)">Potvrda lozinke</label>
+        <input type="password" class="form-control" [class.is-invalid]="formGroup.get('confirmPassword')?.invalid && 
+        (formGroup.get('confirmPassword')?.dirty ||
+        formGroup.get('confirmPassword')?.touched ||
+        isSubmitted)" id="confirmPassword" placeholder="Potvrda lozinke" formControlName="confirmPassword">
+        <span *ngIf="formGroup.get('confirmPassword')?.hasError('required') && 
+        (formGroup.get('confirmPassword')?.dirty ||
+        formGroup.get('confirmPassword')?.touched ||
+        isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+    </div>
+    <div class="form-group">
+        <label for="userType" [class.text-danger]="formGroup.get('userType')?.invalid && 
+        (formGroup.get('userType')?.dirty ||
+        formGroup.get('userType')?.touched ||
+        isSubmitted)">Tip korisnika</label>
+        <select class="form-select" [class.is-invalid]="formGroup.get('userType')?.invalid && 
+        (formGroup.get('userType')?.dirty ||
+        formGroup.get('userType')?.touched ||
+        isSubmitted)" id="userType" placeholder="Izaberite tip korisnika" formControlName="userType">
+            <option [value]="'Admin'">Admin</option>
+            <option [value]="'User'">User</option>
+        </select>
+        <span *ngIf="formGroup.get('userType')?.hasError('required') && 
+        (formGroup.get('userType')?.dirty ||
+        formGroup.get('userType')?.touched ||
+        isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registruj se</button>
+</form>

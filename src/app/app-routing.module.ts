@@ -12,12 +12,25 @@ import { TechnologicalSystemComponent } from './components/technological-system/
 import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
 import { ObjectOfLaborTechnologicalProcedureComponent } from './components/object-of-labor-technological-procedure/object-of-labor-technological-procedure.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
   {
     path: '', component: NavigationComponent, children: [
-      { path: 'employee', component: EmployeeComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'registration', component: RegistrationComponent },
+      {
+        path: 'employee',
+        component: EmployeeComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRole: 'Admin'
+        }
+      },
       { path: 'workplace', component: WorkplaceComponent },
       { path: 'organizationalUnit', component: OrganizationalUnitComponent },
       { path: 'productionOrder', component: ProductionOrderComponent },

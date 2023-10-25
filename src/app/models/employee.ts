@@ -4,6 +4,7 @@ export class Employee {
     lastName: string | null = null;
     email: string | null = null;
     password: string | null = null;
+    confirmPassword: string | null = null;
     jmbg: string | null = null;
     phoneNumber: string | null = null;
     address: string | null = null;
@@ -14,7 +15,7 @@ export class Employee {
     organizationalUnitId: string | null = null;
     totalCount: number | null = null;
 
-    constructor(employeeId: string, firstName: string, lastName: string, email: string, password: string, jmbg: string,
+    constructor(employeeId: string, firstName: string, lastName: string, email: string, password: string, confirmPassword: string, jmbg: string,
         phoneNumber: string, address: string, city: string, sallary: number, dateOfEmployment: Date, workplaceId: string,
         organizationalUnitId: string) {
         this.employeeId = employeeId;
@@ -22,6 +23,7 @@ export class Employee {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.confirmPassword = confirmPassword;
         this.jmbg = jmbg;
         this.phoneNumber = phoneNumber;
         this.address = address;

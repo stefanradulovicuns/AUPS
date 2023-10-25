@@ -18,6 +18,8 @@ import { TechnologicalSystemComponent } from './components/technological-system/
 import { TechnologicalProcedureComponent } from './components/technological-procedure/technological-procedure.component';
 import { ObjectOfLaborTechnologicalProcedureComponent } from './components/object-of-labor-technological-procedure/object-of-labor-technological-procedure.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { NavigationComponent } from './components/navigation/navigation.componen
     TechnologicalProcedureComponent,
     ObjectOfLaborTechnologicalProcedureComponent,
     NavigationComponent,
+    LoginComponent,
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,
