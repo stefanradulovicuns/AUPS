@@ -33,7 +33,8 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let objectOfLabor of objectOfLabors" (click)="onClickRow(objectOfLabor)">
+        <tr *ngFor="let objectOfLabor of objectOfLabors"
+            [routerLink]="['/objectOfLabor', objectOfLabor.objectOfLaborId]">
             <td>{{ objectOfLabor.objectOfLaborName }}</td>
             <td>{{ objectOfLabor.price }}</td>
             <td>{{ objectOfLabor.stockQuantity }}</td>

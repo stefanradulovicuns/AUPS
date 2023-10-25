@@ -1,8 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ObjectOfLaborTechnologicalProcedure } from 'src/app/models/objectOfLaborTechnologicalProcedure';
+import { TechnologicalProcedure } from 'src/app/models/technologicalProcedure';
 import { ObjectOfLaborTechnologicalProcedureService } from 'src/app/services/object-of-labor-technological-procedure.service';
+import { TechnologicalProcedureService } from 'src/app/services/technological-procedure.service';
 
 @Component({
   selector: 'app-object-of-labor-technological-procedure',
@@ -11,6 +13,8 @@ import { ObjectOfLaborTechnologicalProcedureService } from 'src/app/services/obj
 })
 export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
+  @Input() objectOfLaborId: string = '';
+
   @ViewChild('content') modal!: ElementRef;
 
   modalReference!: NgbModalRef;
@@ -18,7 +22,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   objectOfLaborTechnologicalProcedures: ObjectOfLaborTechnologicalProcedure[] | null = null;
   objectOfLaborTechnologicalProceduresTotalCount: number | null = null;
   search: string = '';
-  sortBy: string = '';
+  sortBy: string = 'OrderOfExecution';
   sortOrder: string = 'ASC';
   page: number = 1;
   count: number = 2;
@@ -28,26 +32,29 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   formGroup: FormGroup = this.fb.group({
     objectOfLaborTechnologicalProcedureId: [''],
-    objectOfLaborId: ['', Validators.required],
-    technologicalProcedureId: ['', Validators.required]
+    technologicalProcedureId: ['', Validators.required],
+    orderOfExecution: ['', Validators.required]
   });
   isSubmitted: boolean = false;
   operation: string | null = null;
+  technologicalProcedures: TechnologicalProcedure[] | null = null;
 
   toastMessage: string | null = null;
   isError: boolean = false;
 
   constructor(private objectOfLaborTechnologicalProcedureService: ObjectOfLaborTechnologicalProcedureService,
     private modalService: NgbModal,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private technologicalProcedureService: TechnologicalProcedureService) { }
 
   ngOnInit(): void {
     this.getObjectOfLaborTechnologicalProcedures();
+    this.getTechnologicalProcedures();
   }
 
   getObjectOfLaborTechnologicalProcedures() {
     this.isLoading = true;
-    this.objectOfLaborTechnologicalProcedureService.getObjectOfLaborTechnologicalProcedures(this.search, this.sortBy, this.sortOrder, this.page, this.count).subscribe({
+    this.objectOfLaborTechnologicalProcedureService.getObjectOfLaborTechnologicalProcedures(this.search, this.sortBy, this.sortOrder, this.page, this.count, this.objectOfLaborId).subscribe({
       next: (data) => {
         this.objectOfLaborTechnologicalProcedures = data;
         this.objectOfLaborTechnologicalProceduresTotalCount = data && data[0] && data[0].totalCount ? data[0].totalCount : 0;
@@ -61,6 +68,24 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
       complete: () => {
         this.isLoading = false;
+      }
+    });
+  }
+
+  getTechnologicalProcedures() {
+    this.technologicalProcedureService.getTechnologicalProcedures('', '', '', 0, 0).subscribe({
+      next: (data) => {
+        this.technologicalProcedures = data;
+      },
+
+      error: (error) => {
+        console.log(error);
+        this.toastMessage = 'Došlo je do greške';
+        this.isError = true;
+      },
+
+      complete: () => {
+
       }
     });
   }
@@ -148,7 +173,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   }
 
   onClickRow(objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
-    const { totalCount, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -164,7 +189,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickUpdate(event: Event, objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -173,7 +198,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickDelete(event: Event, objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'DELETE';
@@ -184,11 +209,12 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
     this.isSubmitted = true;
 
     if (this.formGroup.valid) {
-      const ObjectOfLaborTechnologicalProcedure = Object.assign(this.formGroup.value);
+      const objectOfLaborTechnologicalProcedure = Object.assign(this.formGroup.value);
+      objectOfLaborTechnologicalProcedure.objectOfLaborId = this.objectOfLaborId;
       if (this.operation === 'CREATE') {
-        this.createObjectOfLaborTechnologicalProcedure(ObjectOfLaborTechnologicalProcedure);
+        this.createObjectOfLaborTechnologicalProcedure(objectOfLaborTechnologicalProcedure);
       } else if (this.operation === 'UPDATE') {
-        this.updateObjectOfLaborTechnologicalProcedure(ObjectOfLaborTechnologicalProcedure);
+        this.updateObjectOfLaborTechnologicalProcedure(objectOfLaborTechnologicalProcedure);
       }
     }
   }

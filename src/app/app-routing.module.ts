@@ -16,6 +16,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
+import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
@@ -35,12 +36,12 @@ const routes: Routes = [
       { path: 'organizationalUnit', component: OrganizationalUnitComponent },
       { path: 'productionOrder', component: ProductionOrderComponent },
       { path: 'objectOfLabor', component: ObjectOfLaborComponent },
+      { path: 'objectOfLabor/:id', component: ObjectOfLaborInfoComponent },
       { path: 'warehouse', component: WarehouseComponent },
       { path: 'productionPlan', component: ProductionPlanComponent },
       { path: 'plant', component: PlantComponent },
       { path: 'technologicalSystem', component: TechnologicalSystemComponent },
-      { path: 'technologicalProcedure', component: TechnologicalProcedureComponent },
-      { path: 'objectOfLaborTechnologicalProcedure', component: ObjectOfLaborTechnologicalProcedureComponent },
+      { path: 'technologicalProcedure', component: TechnologicalProcedureComponent }
     ]
   },
 ];

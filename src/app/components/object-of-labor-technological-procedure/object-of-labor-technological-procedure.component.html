@@ -4,21 +4,22 @@
         <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
             placeholder="Pretraži tehnološke postupke za predmet rada" />
     </div>
-    <!-- <div class="col-md-3">
+    <div class="col-md-3">
         <label for="sortBy">Sortiraj prema</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getObjectOfLaborTechnologicalProcedures()">
-            <option [ngValue]="'FirstName'" selected>Ime</option>
-            <option [ngValue]="'LastName'">Prezime</option>
-            <option [ngValue]="'Email'">Email</option>
+        <select id="sortBy" class="form-select" [(ngModel)]="sortBy"
+            (ngModelChange)="getObjectOfLaborTechnologicalProcedures()">
+            <option [ngValue]="'OrderOfExecution'" selected>Redosled izvršavanja</option>
+            <option [ngValue]="'TechnologicalProcedureName'">Tehnološki postupak</option>
         </select>
     </div>
     <div class="col-md-3">
         <label for="sortBy">Redosled sortiranja</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getObjectOfLaborTechnologicalProcedures()">
+        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder"
+            (ngModelChange)="getObjectOfLaborTechnologicalProcedures()">
             <option [ngValue]="'ASC'" selected>Rastuće</option>
             <option [ngValue]="'DESC'">Opadajuće</option>
         </select>
-    </div> -->
+    </div>
 </div>
 
 <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
@@ -26,16 +27,16 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">ObjectOfLaborId</th>
-            <th scope="col">TechnologicalProcedureId</th>
+            <th scope="col">Redosled izvršavanja</th>
+            <th scope="col">Tehnološki postupak</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let objectOfLaborTechnologicalProcedure of objectOfLaborTechnologicalProcedures"
             (click)="onClickRow(objectOfLaborTechnologicalProcedure)">
-            <td>{{ objectOfLaborTechnologicalProcedure.objectOfLaborId }}</td>
-            <td>{{ objectOfLaborTechnologicalProcedure.technologicalProcedureId }}</td>
+            <td>{{ objectOfLaborTechnologicalProcedure.orderOfExecution }}</td>
+            <td>{{ objectOfLaborTechnologicalProcedure.technologicalProcedureName }}</td>
             <td>
                 <button type="button" class="btn btn-primary"
                     (click)="onClickUpdate($event, objectOfLaborTechnologicalProcedure)">Izmeni</button>
@@ -77,32 +78,37 @@
     <form [formGroup]="formGroup" (submit)="onSubmitForm()">
         <div class="modal-body">
             <div class="form-group">
-                <label for="objectOfLabor" [class.text-danger]="formGroup.get('objectOfLaborId')?.invalid && 
-                (formGroup.get('objectOfLaborId')?.dirty ||
-                formGroup.get('objectOfLaborId')?.touched ||
-                isSubmitted)">Predmet rada</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('objectOfLaborId')?.invalid && 
-                (formGroup.get('objectOfLaborId')?.dirty ||
-                formGroup.get('objectOfLaborId')?.touched ||
-                isSubmitted)" id="objectOfLabor" placeholder="Unesite predmet rada" formControlName="objectOfLaborId">
-                <span *ngIf="formGroup.get('objectOfLaborId')?.hasError('required') && 
-                (formGroup.get('objectOfLaborId')?.dirty ||
-                formGroup.get('objectOfLaborId')?.touched ||
-                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
-            </div>
-            <div class="form-group">
                 <label for="technologicalProcedure" [class.text-danger]="formGroup.get('technologicalProcedureId')?.invalid && 
                 (formGroup.get('technologicalProcedureId')?.dirty ||
                 formGroup.get('technologicalProcedureId')?.touched ||
                 isSubmitted)">Tehnološki postupak</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('technologicalProcedureId')?.invalid && 
+                <select class="form-select" [class.is-invalid]="formGroup.get('technologicalProcedureId')?.invalid && 
                 (formGroup.get('technologicalProcedureId')?.dirty ||
                 formGroup.get('technologicalProcedureId')?.touched ||
-                isSubmitted)" id="technologicalProcedure" placeholder="Unesite tehnološki postupak"
+                isSubmitted)" id="technologicalProcedureId" placeholder="Izaberite tehnološki postupak"
                     formControlName="technologicalProcedureId">
+                    <option *ngFor="let technologicalProcedure of technologicalProcedures"
+                        [value]="technologicalProcedure.technologicalProcedureId">{{
+                        technologicalProcedure.technologicalProcedureName }}</option>
+                </select>
                 <span *ngIf="formGroup.get('technologicalProcedureId')?.hasError('required') && 
                 (formGroup.get('technologicalProcedureId')?.dirty ||
                 formGroup.get('technologicalProcedureId')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="orderOfExecution" [class.text-danger]="formGroup.get('orderOfExecution')?.invalid && 
+                (formGroup.get('orderOfExecution')?.dirty ||
+                formGroup.get('orderOfExecution')?.touched ||
+                isSubmitted)">Redosled izvršavanja</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('orderOfExecution')?.invalid && 
+                (formGroup.get('orderOfExecution')?.dirty ||
+                formGroup.get('orderOfExecution')?.touched ||
+                isSubmitted)" id="orderOfExecution" placeholder="Unesite redosled izvršavanja"
+                    formControlName="orderOfExecution">
+                <span *ngIf="formGroup.get('orderOfExecution')?.hasError('required') && 
+                (formGroup.get('orderOfExecution')?.dirty ||
+                formGroup.get('orderOfExecution')?.touched ||
                 isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
         </div>
@@ -110,7 +116,7 @@
             <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
                 class="btn btn-primary">Potvrdi</button>
             <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
-                (click)=" deleteObjectOfLaborTechnologicalProcedure(formGroup.get('ObjectOfLaborTechnologicalProcedureId')?.value)">Obriši</button>
+                (click)=" deleteObjectOfLaborTechnologicalProcedure(formGroup.get('objectOfLaborTechnologicalProcedureId')?.value)">Obriši</button>
             <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
         </div>
     </form>

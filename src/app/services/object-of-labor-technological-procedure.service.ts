@@ -11,13 +11,14 @@ export class ObjectOfLaborTechnologicalProcedureService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getObjectOfLaborTechnologicalProcedures(search: string, sortBy: string, sortOrder: string, page: number, count: number): Observable<ObjectOfLaborTechnologicalProcedure[]> {
+  getObjectOfLaborTechnologicalProcedures(search: string, sortBy: string, sortOrder: string, page: number, count: number, objectOfLaborId: string): Observable<ObjectOfLaborTechnologicalProcedure[]> {
     let queryParams = new HttpParams();
     queryParams = queryParams.append('search', search);
     queryParams = queryParams.append('sortBy', sortBy);
     queryParams = queryParams.append('sortOrder', sortOrder);
     queryParams = queryParams.append('page', page);
     queryParams = queryParams.append('count', count);
+    queryParams = queryParams.append('objectOfLaborId', objectOfLaborId);
     return this.httpClient.get<ObjectOfLaborTechnologicalProcedure[]>(`${BACKEND_URL}ObjectOfLaborTechnologicalProcedure`, { params: queryParams });
   }
 

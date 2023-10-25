@@ -20,6 +20,7 @@ import { ObjectOfLaborTechnologicalProcedureComponent } from './components/objec
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { RegistrationComponent } from './components/registration/registration.co
     NavigationComponent,
     LoginComponent,
     RegistrationComponent,
+    ObjectOfLaborInfoComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,21 @@
+<div *ngIf="objectOfLabor" class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ objectOfLabor.objectOfLaborName }}</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">Informacije</h6>
+        <p class="card-text">{{ objectOfLabor.description }}</p>
+        <ul>
+            <li *ngIf="warehouse" class="card-text">Skladište: {{ warehouse.address }}, {{ warehouse.city }}</li>
+            <li class="card-text">Količina na zalihama: {{ objectOfLabor.stockQuantity }}</li>
+            <li class="card-text">Cena: {{ objectOfLabor.price }}</li>
+        </ul>
+
+    </div>
+</div>
+
+<div *ngIf="objectOfLabor" class=" card">
+    <div class="card-body">
+        <h5 class="card-title">Spisak tehnoloških postupaka</h5>
+        <app-object-of-labor-technological-procedure *ngIf="objectOfLabor.objectOfLaborId"
+            [objectOfLaborId]="objectOfLabor.objectOfLaborId"></app-object-of-labor-technological-procedure>
+    </div>
+</div>
