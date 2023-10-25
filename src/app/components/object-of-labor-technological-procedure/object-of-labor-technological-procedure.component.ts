@@ -179,7 +179,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   }
 
   onClickRow(objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
-    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -195,7 +195,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickUpdate(event: Event, objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -204,7 +204,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickDelete(event: Event, objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'DELETE';

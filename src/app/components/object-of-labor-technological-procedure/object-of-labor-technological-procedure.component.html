@@ -29,6 +29,9 @@
         <tr>
             <th scope="col">Redosled izvršavanja</th>
             <th scope="col">Tehnološki postupak</th>
+            <th scope="col">Tehnološki sistem</th>
+            <th scope="col">Pogon</th>
+            <th scope="col">Organizaciona jedinica</th>
             <th *ngIf="showCurrentState" scope="col">Stanje</th>
             <th scope="col"></th>
         </tr>
@@ -38,6 +41,9 @@
             (click)="onClickRow(objectOfLaborTechnologicalProcedure)">
             <td>{{ objectOfLaborTechnologicalProcedure.orderOfExecution }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.technologicalProcedureName }}</td>
+            <td>{{ objectOfLaborTechnologicalProcedure.technologicalSystemName }}</td>
+            <td>{{ objectOfLaborTechnologicalProcedure.plantName }}</td>
+            <td>{{ objectOfLaborTechnologicalProcedure.organizationalUnitName }}</td>
             <td *ngIf="showCurrentState && currentTechnologicalProcedure !== null">
                 <span
                     *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedure + 1 > objectOfLaborTechnologicalProcedure.orderOfExecution"

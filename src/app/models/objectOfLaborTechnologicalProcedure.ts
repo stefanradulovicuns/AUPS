@@ -5,6 +5,9 @@ export class ObjectOfLaborTechnologicalProcedure {
     objectOfLaborName: string | null = null;
     technologicalProcedureId: string | null = null;
     technologicalProcedureName: string | null = null;
+    technologicalSystemName: string | null = null;
+    plantName: string | null = null;
+    organizationalUnitName: string | null = null;
     totalCount: number | null = null;
 
     constructor(objectOfLaborTechnologicalProcedureId: string, orderOfExecution: number, objectOfLaborId: string, objectOfLaborName: string,
