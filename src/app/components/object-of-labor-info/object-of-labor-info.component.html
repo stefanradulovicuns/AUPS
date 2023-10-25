@@ -8,7 +8,6 @@
             <li class="card-text">Količina na zalihama: {{ objectOfLabor.stockQuantity }}</li>
             <li class="card-text">Cena: {{ objectOfLabor.price }}</li>
         </ul>
-
     </div>
 </div>
 
@@ -16,6 +15,7 @@
     <div class="card-body">
         <h5 class="card-title">Spisak tehnoloških postupaka</h5>
         <app-object-of-labor-technological-procedure *ngIf="objectOfLabor.objectOfLaborId"
-            [objectOfLaborId]="objectOfLabor.objectOfLaborId"></app-object-of-labor-technological-procedure>
+            [objectOfLaborId]="objectOfLabor.objectOfLaborId" [showAdminButtons]="true"
+            [showFinishButton]="false"></app-object-of-labor-technological-procedure>
     </div>
 </div>

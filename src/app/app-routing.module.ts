@@ -17,6 +17,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
+import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'employee', pathMatch: 'full' },
@@ -35,6 +36,7 @@ const routes: Routes = [
       { path: 'workplace', component: WorkplaceComponent },
       { path: 'organizationalUnit', component: OrganizationalUnitComponent },
       { path: 'productionOrder', component: ProductionOrderComponent },
+      { path: 'productionOrder/:id', component: ProductionOrderInfoComponent },
       { path: 'objectOfLabor', component: ObjectOfLaborComponent },
       { path: 'objectOfLabor/:id', component: ObjectOfLaborInfoComponent },
       { path: 'warehouse', component: WarehouseComponent },

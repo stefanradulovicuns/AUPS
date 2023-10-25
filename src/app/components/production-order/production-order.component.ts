@@ -7,6 +7,7 @@ import { ProductionOrder } from 'src/app/models/productionOrder';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
 import { ProductionOrderService } from 'src/app/services/production-order.service';
+import { ObjectOfLaborTechnologicalProcedureService } from 'src/app/services/object-of-labor-technological-procedure.service';
 
 @Component({
   selector: 'app-production-order',
@@ -36,7 +37,7 @@ export class ProductionOrderComponent implements OnInit {
     endDate: ['', Validators.required],
     quantity: ['', Validators.required],
     note: [0],
-    employeeId: ['', Validators.required],
+    manager: [''],
     objectOfLaborId: ['', Validators.required]
   });
   isSubmitted: boolean = false;
@@ -52,7 +53,8 @@ export class ProductionOrderComponent implements OnInit {
     private employeeService: EmployeeService,
     private objectOfLaborService: ObjectOfLaborService,
     private modalService: NgbModal,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private objectOfLaborTechnologicalProcedureService: ObjectOfLaborTechnologicalProcedureService) { }
 
   ngOnInit(): void {
     this.getProductionOrders();
@@ -195,7 +197,7 @@ export class ProductionOrderComponent implements OnInit {
   }
 
   onClickRow(productionOrder: ProductionOrder) {
-    const { totalCount, ...productionOrderData } = productionOrder;
+    const { totalCount, currentTechnologicalProcedure, currentState, employeeId, objectOfLaborName, ...productionOrderData } = productionOrder;
     this.formGroup.setValue({ ...productionOrderData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -211,7 +213,7 @@ export class ProductionOrderComponent implements OnInit {
 
   onClickUpdate(event: Event, productionOrder: ProductionOrder) {
     event.stopPropagation();
-    const { totalCount, ...productionOrderData } = productionOrder;
+    const { totalCount, currentTechnologicalProcedure, currentState, employeeId, objectOfLaborName, ...productionOrderData } = productionOrder;
     this.formGroup.setValue({ ...productionOrderData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -220,7 +222,7 @@ export class ProductionOrderComponent implements OnInit {
 
   onClickDelete(event: Event, productionOrder: ProductionOrder) {
     event.stopPropagation();
-    const { totalCount, ...productionOrderData } = productionOrder;
+    const { totalCount, currentTechnologicalProcedure, currentState, employeeId, objectOfLaborName, ...productionOrderData } = productionOrder;
     this.formGroup.setValue({ ...productionOrderData });
     this.formGroup.disable();
     this.operation = 'DELETE';

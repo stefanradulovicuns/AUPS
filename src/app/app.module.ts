@@ -21,6 +21,7 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
+import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/ob
     LoginComponent,
     RegistrationComponent,
     ObjectOfLaborInfoComponent,
+    ProductionOrderInfoComponent,
   ],
   imports: [
     BrowserModule,

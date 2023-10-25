@@ -18,22 +18,26 @@ export class ProductionOrderService {
     queryParams = queryParams.append('sortOrder', sortOrder);
     queryParams = queryParams.append('page', page);
     queryParams = queryParams.append('count', count);
-    return this.httpClient.get<ProductionOrder[]>(`${BACKEND_URL}ProductionOrder`, { params: queryParams });
+    return this.httpClient.get<ProductionOrder[]>(`${BACKEND_URL}ProductionOrder`, { params: queryParams, headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
   }
 
   getProductionOrderById(id: string): Observable<ProductionOrder> {
-    return this.httpClient.get<ProductionOrder>(`${BACKEND_URL}ProductionOrder/${id}`);
+    return this.httpClient.get<ProductionOrder>(`${BACKEND_URL}ProductionOrder/${id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
   }
 
   createProductionOrder(productionOrder: ProductionOrder): Observable<ProductionOrder> {
-    return this.httpClient.post<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder);
+    return this.httpClient.post<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
   }
 
   updateProductionOrder(productionOrder: ProductionOrder): Observable<ProductionOrder> {
-    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder);
+    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+  }
+
+  finishCurrentTechnologicalProcedure(productionOrder: ProductionOrder): Observable<ProductionOrder> {
+    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/finishCurrentTechnologicalProcedure`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
   }
 
   deleteProductionOrder(id: string): Observable<any> {
-    return this.httpClient.delete<any>(`${BACKEND_URL}ProductionOrder/${id}`);
+    return this.httpClient.delete<any>(`${BACKEND_URL}ProductionOrder/${id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
   }
 }

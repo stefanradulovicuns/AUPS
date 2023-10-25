@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ObjectOfLaborTechnologicalProcedure } from 'src/app/models/objectOfLaborTechnologicalProcedure';
@@ -14,6 +14,12 @@ import { TechnologicalProcedureService } from 'src/app/services/technological-pr
 export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   @Input() objectOfLaborId: string = '';
+  @Input() showCurrentState: boolean = false;
+  @Input() currentTechnologicalProcedure: number | null = null;
+  @Input() showAdminButtons: boolean = false;
+  @Input() showFinishButton: boolean = false;
+
+  @Output() finishTechnologicalProcedureBtnClicked = new EventEmitter<boolean>();
 
   @ViewChild('content') modal!: ElementRef;
 
@@ -203,6 +209,11 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);
+  }
+
+  onClickFinish(event: Event) {
+    event.stopPropagation();
+    this.finishTechnologicalProcedureBtnClicked.emit(true);
   }
 
   onSubmitForm() {

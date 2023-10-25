@@ -2,7 +2,7 @@
     <div class="col-md-3">
         <label for="search">Pretraga</label>
         <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
-            placeholder="Pretraži tehnološke postupke za predmet rada" />
+            placeholder="Pretraži tehnološke postupke" />
     </div>
     <div class="col-md-3">
         <label for="sortBy">Sortiraj prema</label>
@@ -29,6 +29,7 @@
         <tr>
             <th scope="col">Redosled izvršavanja</th>
             <th scope="col">Tehnološki postupak</th>
+            <th *ngIf="showCurrentState" scope="col">Stanje</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -37,15 +38,35 @@
             (click)="onClickRow(objectOfLaborTechnologicalProcedure)">
             <td>{{ objectOfLaborTechnologicalProcedure.orderOfExecution }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.technologicalProcedureName }}</td>
+            <td *ngIf="showCurrentState && currentTechnologicalProcedure !== null">
+                <span
+                    *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedure + 1 > objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    class="text-success">Završeno</span>
+                <span *ngIf="currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    class="text-warning">U
+                    procesu izvršenja</span>
+                <span
+                    *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedure + 1 < objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    class="text-danger">Nije
+                    započeto</span>
+            </td>
             <td>
-                <button type="button" class="btn btn-primary"
+                <button *ngIf="showAdminButtons" type="button" class="btn btn-primary"
                     (click)="onClickUpdate($event, objectOfLaborTechnologicalProcedure)">Izmeni</button>
-                <button type="button" class="btn btn-danger"
+                <button *ngIf="showAdminButtons" type="button" class="btn btn-danger"
                     (click)="onClickDelete($event, objectOfLaborTechnologicalProcedure)">Obriši</button>
+                <button
+                    *ngIf="showFinishButton && currentTechnologicalProcedure && currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    type="button" class="btn btn-success" (click)="onClickFinish($event)">Završi</button>
             </td>
         </tr>
     </tbody>
 </table>
+
+<ngb-progressbar
+    *ngIf="showCurrentState && currentTechnologicalProcedure !== null && objectOfLaborTechnologicalProceduresTotalCount !== null"
+    [showValue]="true" type="success"
+    [value]="(currentTechnologicalProcedure / objectOfLaborTechnologicalProceduresTotalCount) * 100"></ngb-progressbar>
 
 <div class="d-flex justify-content-between p-2">
     <ngb-pagination *ngIf="objectOfLaborTechnologicalProceduresTotalCount"
@@ -61,7 +82,7 @@
     </select>
 </div>
 
-<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+<button *ngIf="showAdminButtons" type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">

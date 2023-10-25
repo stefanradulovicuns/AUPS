@@ -9,7 +9,9 @@
         <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getProductionOrders()">
             <option [ngValue]="'StartDate'" selected>Datum početka</option>
             <option [ngValue]="'EndDate'">Datum završetka</option>
+            <option [ngValue]="'ObjectOfLaborName'">Predmet rada</option>
             <option [ngValue]="'Quantity'">Količina</option>
+            <option [ngValue]="'Manager'">Menadžer</option>
         </select>
     </div>
     <div class="col-md-3">
@@ -28,15 +30,23 @@
         <tr>
             <th scope="col">Datum početka</th>
             <th scope="col">Datum završetka</th>
+            <th scope="col">Predmet rada</th>
             <th scope="col">Količina</th>
+            <th scope="col">Menadžer</th>
+            <th scope="col">Stanje</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let productionOrder of productionOrders" (click)="onClickRow(productionOrder)">
-            <td>{{ productionOrder.startDate }}</td>
-            <td>{{ productionOrder.endDate }}</td>
+        <tr *ngFor="let productionOrder of productionOrders"
+            [routerLink]="['/productionOrder', productionOrder.productionOrderId]">
+            <td>{{ productionOrder.startDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ productionOrder.endDate | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ productionOrder.objectOfLaborName }}</td>
             <td>{{ productionOrder.quantity }}</td>
+            <td>{{ productionOrder.manager }}</td>
+            <td><ngb-progressbar type="success"
+                    [value]="productionOrder.currentState ? productionOrder.currentState : 0"></ngb-progressbar></td>
             <td>
                 <button type="button" class="btn btn-primary"
                     (click)="onClickUpdate($event, productionOrder)">Izmeni</button>
@@ -121,7 +131,11 @@
                 <textarea type="text" class="form-control" id="note" placeholder="Unesite napomenu"
                     formControlName="note"></textarea>
             </div>
-            <div class="form-group">
+            <div *ngIf="operation==='REVIEW'" class="form-group">
+                <label for="manager">Menadžer</label>
+                <input type="text" class="form-control" id="manager" formControlName="manager">
+            </div>
+            <!-- <div class="form-group">
                 <label for="employeeId" [class.text-danger]="formGroup.get('employeeId')?.invalid && 
                     (formGroup.get('employeeId')?.dirty ||
                     formGroup.get('employeeId')?.touched ||
@@ -137,7 +151,7 @@
                     (formGroup.get('employeeId')?.dirty ||
                     formGroup.get('employeeId')?.touched ||
                     isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="objectOfLaborId" [class.text-danger]="formGroup.get('objectOfLaborId')?.invalid && 
                     (formGroup.get('objectOfLaborId')?.dirty ||
