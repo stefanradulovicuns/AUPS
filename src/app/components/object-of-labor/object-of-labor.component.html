@@ -9,6 +9,7 @@
         <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getObjectOfLabors()">
             <option [ngValue]="'ObjectOfLaborName'" selected>Naziv predmeta rada</option>
             <option [ngValue]="'Price'">Cena</option>
+            <option [ngValue]="'WarehouseFullAddress'">Skladište</option>
             <option [ngValue]="'StockQuantity'">Količina na skladištu</option>
         </select>
     </div>
@@ -28,6 +29,7 @@
         <tr>
             <th scope="col">Naziv predmeta rada</th>
             <th scope="col">Cena</th>
+            <th scope="col">Skladište</th>
             <th scope="col">Količina na skladištu</th>
             <th scope="col"></th>
         </tr>
@@ -36,8 +38,9 @@
         <tr *ngFor="let objectOfLabor of objectOfLabors"
             [routerLink]="['/objectOfLabor', objectOfLabor.objectOfLaborId]">
             <td>{{ objectOfLabor.objectOfLaborName }}</td>
-            <td>{{ objectOfLabor.price }}</td>
-            <td>{{ objectOfLabor.stockQuantity }}</td>
+            <td>{{ objectOfLabor.price | number: '.2-2' }} RSD</td>
+            <td>{{ objectOfLabor.warehouseFullAddress }}</td>
+            <td>{{ objectOfLabor.stockQuantity | number }}</td>
             <td>
                 <button type="button" class="btn btn-primary"
                     (click)="onClickUpdate($event, objectOfLabor)">Izmeni</button>

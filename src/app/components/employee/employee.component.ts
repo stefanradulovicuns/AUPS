@@ -22,7 +22,7 @@ export class EmployeeComponent implements OnInit {
   employees: Employee[] | null = null;
   employeesTotalCount: number | null = null;
   search: string = '';
-  sortBy: string = 'FirstName';
+  sortBy: string = 'LastName';
   sortOrder: string = 'ASC';
   page: number = 1;
   count: number = 2;

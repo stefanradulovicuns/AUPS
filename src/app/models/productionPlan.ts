@@ -3,6 +3,7 @@ export class ProductionPlan {
     productionPlanName: string | null = null;
     description: string | null = null;
     objectOfLaborId: string | null = null;
+    objectOfLaborName: string | null = null;
     totalCount: number | null = null;
 
     constructor(productionPlanId: string, productionPlanName: string, description: string, objectOfLaborId: string) {

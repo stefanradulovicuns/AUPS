@@ -36,7 +36,7 @@
         <tr *ngFor="let warehouse of warehouses" (click)="onClickRow(warehouse)">
             <td>{{ warehouse.city }}</td>
             <td>{{ warehouse.address }}</td>
-            <td>{{ warehouse.capacity }}</td>
+            <td>{{ warehouse.capacity | number }} m<sup>2</sup></td>
             <td>
                 <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, warehouse)">Izmeni</button>
                 <button type="button" class="btn btn-danger" (click)="onClickDelete($event, warehouse)">Obriši</button>
@@ -102,7 +102,7 @@
                 <label for="capacity" [class.text-danger]="formGroup.get('capacity')?.invalid && 
                 (formGroup.get('capacity')?.dirty ||
                 formGroup.get('capacity')?.touched ||
-                isSubmitted)">Kapacitet</label>
+                isSubmitted)">Kapacitet (m<sup>2</sup>)</label>
                 <input type="number" class="form-control" [class.is-invalid]="formGroup.get('capacity')?.invalid && 
                 (formGroup.get('capacity')?.dirty ||
                 formGroup.get('capacity')?.touched ||

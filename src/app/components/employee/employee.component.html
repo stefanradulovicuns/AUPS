@@ -7,9 +7,13 @@
     <div class="col-md-3">
         <label for="sortBy">Sortiraj prema</label>
         <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getEmployees()">
-            <option [ngValue]="'FirstName'" selected>Ime</option>
-            <option [ngValue]="'LastName'">Prezime</option>
+            <option [ngValue]="'LastName'" selected>Prezime</option>
+            <option [ngValue]="'FirstName'">Ime</option>
             <option [ngValue]="'Email'">Email</option>
+            <option [ngValue]="'City'">Grad</option>
+            <option [ngValue]="'Address'">Adresa</option>
+            <option [ngValue]="'WorkplaceName'">Radno mesto</option>
+            <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
         </select>
     </div>
     <div class="col-md-3">
@@ -26,8 +30,8 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th scope="col">Ime</th>
             <th scope="col">Prezime</th>
+            <th scope="col">Ime</th>
             <th scope="col">Email</th>
             <th scope="col">Grad</th>
             <th scope="col">Adresa</th>
@@ -38,8 +42,8 @@
     </thead>
     <tbody>
         <tr *ngFor="let employee of employees" (click)="onClickRow(employee)">
-            <td>{{ employee.firstName }}</td>
             <td>{{ employee.lastName }}</td>
+            <td>{{ employee.firstName }}</td>
             <td>{{ employee.email }}</td>
             <td>{{ employee.city }}</td>
             <td>{{ employee.address }}</td>

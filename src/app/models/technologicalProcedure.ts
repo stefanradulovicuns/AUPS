@@ -3,8 +3,11 @@ export class TechnologicalProcedure {
     technologicalProcedureName: string | null = null;
     duration: number | null = null;
     organizationalUnitId: string | null = null;
+    organizationalUnitName: string | null = null;
     plantId: string | null = null;
+    plantName: string | null = null;
     technologicalSystemId: string | null = null;
+    technologicalSystemName: string | null = null;
     totalCount: number | null = null;
 
     constructor(technologicalProcedureId: string, technologicalProcedureName: string, duration: number, organizationalUnitId: string,

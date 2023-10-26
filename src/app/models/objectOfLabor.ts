@@ -5,6 +5,7 @@ export class ObjectOfLabor {
     price: number | null = null;
     stockQuantity: number | null = null;
     warehouseId: string | null = null;
+    warehouseFullAddress: string | null = null;
     totalCount: number | null = null;
 
     constructor(objectOfLaborId: string, objectOfLaborName: string, descripiton: string, price: number,

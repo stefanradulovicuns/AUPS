@@ -8,6 +8,7 @@
         <label for="sortBy">Sortiraj prema</label>
         <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getProductionPlans()">
             <option [ngValue]="'ProductionPlanName'" selected>Naziv plana proizvodnje</option>
+            <option [ngValue]="'ObjectOfLaborName'">Predmet rada</option>
         </select>
     </div>
     <div class="col-md-3">
@@ -25,12 +26,14 @@
     <thead>
         <tr>
             <th scope="col">Naziv plana proizvodnje</th>
+            <th scope="col">Predmet rada</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let productionPlan of productionPlans" (click)="onClickRow(productionPlan)">
             <td>{{ productionPlan.productionPlanName }}</td>
+            <td>{{ productionPlan.objectOfLaborName }}</td>
             <td>
                 <button type="button" class="btn btn-primary"
                     (click)="onClickUpdate($event, productionPlan)">Izmeni</button>

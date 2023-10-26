@@ -9,6 +9,9 @@
         <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getTechnologicalProcedures()">
             <option [ngValue]="'TechnologicalProcedureName'" selected>Naziv tehnološkog postupka</option>
             <option [ngValue]="'Duration'">Vreme trajanja</option>
+            <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
+            <option [ngValue]="'TechnologicalSystemName'">Tehnološki sistem</option>
+            <option [ngValue]="'Plant'">Pogon</option>
         </select>
     </div>
     <div class="col-md-3">
@@ -27,13 +30,19 @@
         <tr>
             <th scope="col">Naziv tehnološkog postupka</th>
             <th scope="col">Vreme trajanja</th>
+            <th scope="col">Organizaciona jedinica</th>
+            <th scope="col">Tehnološki sistem</th>
+            <th scope="col">Pogon</th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let technologicalProcedure of technologicalProcedures" (click)="onClickRow(technologicalProcedure)">
             <td>{{ technologicalProcedure.technologicalProcedureName }}</td>
-            <td>{{ technologicalProcedure.duration }}</td>
+            <td>{{ technologicalProcedure.duration | number }} min</td>
+            <td>{{ technologicalProcedure.organizationalUnitName }}</td>
+            <td>{{ technologicalProcedure.technologicalSystemName }}</td>
+            <td>{{ technologicalProcedure.plantName }}</td>
             <td>
                 <button type="button" class="btn btn-primary"
                     (click)="onClickUpdate($event, technologicalProcedure)">Izmeni</button>
@@ -90,7 +99,7 @@
                 <label for="duration" [class.text-danger]="formGroup.get('duration')?.invalid && 
                 (formGroup.get('duration')?.dirty ||
                 formGroup.get('duration')?.touched ||
-                isSubmitted)">Vreme trajanja</label>
+                isSubmitted)">Vreme trajanja (min)</label>
                 <input type="number" class="form-control" [class.is-invalid]="formGroup.get('duration')?.invalid && 
                 (formGroup.get('duration')?.dirty ||
                 formGroup.get('duration')?.touched ||

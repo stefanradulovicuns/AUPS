@@ -4,9 +4,9 @@
         <h6 class="card-subtitle mb-2 text-body-secondary">Informacije</h6>
         <p class="card-text">{{ objectOfLabor.description }}</p>
         <ul>
-            <li *ngIf="warehouse" class="card-text">Skladište: {{ warehouse.address }}, {{ warehouse.city }}</li>
-            <li class="card-text">Količina na zalihama: {{ objectOfLabor.stockQuantity }}</li>
-            <li class="card-text">Cena: {{ objectOfLabor.price }}</li>
+            <li *ngIf="warehouse" class="card-text">Skladište: {{ warehouse.city }}, {{ warehouse.address }}</li>
+            <li class="card-text">Količina na zalihama: {{ objectOfLabor.stockQuantity | number }}</li>
+            <li class="card-text">Cena: {{ objectOfLabor.price | number: '.2-2' }} RSD</li>
         </ul>
     </div>
 </div>
