@@ -8,6 +8,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
 import { ProductionOrderService } from 'src/app/services/production-order.service';
 import { ObjectOfLaborTechnologicalProcedureService } from 'src/app/services/object-of-labor-technological-procedure.service';
+import { DatePipe, formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-production-order',
@@ -53,8 +54,7 @@ export class ProductionOrderComponent implements OnInit {
     private employeeService: EmployeeService,
     private objectOfLaborService: ObjectOfLaborService,
     private modalService: NgbModal,
-    private fb: FormBuilder,
-    private objectOfLaborTechnologicalProcedureService: ObjectOfLaborTechnologicalProcedureService) { }
+    private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getProductionOrders();
@@ -215,6 +215,7 @@ export class ProductionOrderComponent implements OnInit {
     event.stopPropagation();
     const { totalCount, currentTechnologicalProcedure, currentState, employeeId, objectOfLaborName, ...productionOrderData } = productionOrder;
     this.formGroup.setValue({ ...productionOrderData });
+    this.setFormDateValues(productionOrder);
     this.formGroup.enable();
     this.operation = 'UPDATE';
     this.open(this.modal);
@@ -224,6 +225,7 @@ export class ProductionOrderComponent implements OnInit {
     event.stopPropagation();
     const { totalCount, currentTechnologicalProcedure, currentState, employeeId, objectOfLaborName, ...productionOrderData } = productionOrder;
     this.formGroup.setValue({ ...productionOrderData });
+    this.setFormDateValues(productionOrder);
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);
@@ -234,6 +236,18 @@ export class ProductionOrderComponent implements OnInit {
 
     if (this.formGroup.valid) {
       const productionOrder = Object.assign(this.formGroup.value);
+      const startDate = new Date(
+        this.formGroup.get('startDate')?.value.year,
+        this.formGroup.get('startDate')?.value.month - 1,
+        this.formGroup.get('startDate')?.value.day + 1
+      );
+      const endDate = new Date(
+        this.formGroup.get('endDate')?.value.year,
+        this.formGroup.get('endDate')?.value.month - 1,
+        this.formGroup.get('endDate')?.value.day + 1
+      );
+      productionOrder.startDate = startDate;
+      productionOrder.endDate = endDate;
       if (this.operation === 'CREATE') {
         this.createProductionOrder(productionOrder);
       } else if (this.operation === 'UPDATE') {
@@ -245,5 +259,24 @@ export class ProductionOrderComponent implements OnInit {
   onHideToast() {
     this.toastMessage = null;
     this.isError = false;
+  }
+
+  private setFormDateValues(productionOrder: ProductionOrder) {
+    if (productionOrder.startDate) {
+      const startDate = new Date(productionOrder.startDate);
+      this.formGroup.get('startDate')?.setValue({
+        year: startDate.getFullYear(),
+        month: startDate.getMonth() + 1,
+        day: startDate.getDate()
+      });
+    }
+    if (productionOrder.endDate) {
+      const endDate = new Date(productionOrder.endDate);
+      this.formGroup.get('endDate')?.setValue({
+        year: endDate.getFullYear(),
+        month: endDate.getMonth() + 1,
+        day: endDate.getDate()
+      });
+    }
   }
 }

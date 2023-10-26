@@ -220,6 +220,7 @@ export class EmployeeComponent implements OnInit {
     event.stopPropagation();
     const { totalCount, ...employeeData } = employee;
     this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
+    this.setFormDateValues(employee);
     this.formGroup.enable();
     this.operation = 'UPDATE';
     this.open(this.modal);
@@ -229,6 +230,7 @@ export class EmployeeComponent implements OnInit {
     event.stopPropagation();
     const { totalCount, ...employeeData } = employee;
     this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
+    this.setFormDateValues(employee);
     this.formGroup.disable();
     this.operation = 'DELETE';
     this.open(this.modal);
@@ -239,6 +241,12 @@ export class EmployeeComponent implements OnInit {
 
     if (this.formGroup.valid) {
       const employee = Object.assign(this.formGroup.value);
+      const dateOfEmployment = new Date(
+        this.formGroup.get('dateOfEmployment')?.value.year,
+        this.formGroup.get('dateOfEmployment')?.value.month - 1,
+        this.formGroup.get('dateOfEmployment')?.value.day + 1
+      );
+      employee.dateOfEmployment = dateOfEmployment;
       if (this.operation === 'CREATE') {
         this.createEmployee(employee);
       } else if (this.operation === 'UPDATE') {
@@ -250,5 +258,16 @@ export class EmployeeComponent implements OnInit {
   onHideToast() {
     this.toastMessage = null;
     this.isError = false;
+  }
+
+  private setFormDateValues(employee: Employee) {
+    if (employee.dateOfEmployment) {
+      const dateOfEmployment = new Date(employee.dateOfEmployment);
+      this.formGroup.get('dateOfEmployment')?.setValue({
+        year: dateOfEmployment.getFullYear(),
+        month: dateOfEmployment.getMonth() + 1,
+        day: dateOfEmployment.getDate()
+      });
+    }
   }
 }

@@ -213,7 +213,10 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickFinish(event: Event) {
     event.stopPropagation();
-    this.finishTechnologicalProcedureBtnClicked.emit(true);
+    if (window.confirm('Da li ste sigurni da želite da završite tehnološki postupak?')) {
+      console.log(1);
+      this.finishTechnologicalProcedureBtnClicked.emit(true);
+    }
   }
 
   onSubmitForm() {

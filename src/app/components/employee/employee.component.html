@@ -219,11 +219,17 @@
                 (formGroup.get('dateOfEmployment')?.dirty ||
                 formGroup.get('dateOfEmployment')?.touched ||
                 isSubmitted)">Datum zaposlenja</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('dateOfEmployment')?.invalid && 
+                <!-- <input type="text" class="form-control" [class.is-invalid]="formGroup.get('dateOfEmployment')?.invalid && 
                 (formGroup.get('dateOfEmployment')?.dirty ||
                 formGroup.get('dateOfEmployment')?.touched ||
                 isSubmitted)" id="dateOfEmployment" placeholder="Unesite datum zaposlenja"
-                    formControlName="dateOfEmployment">
+                    formControlName="dateOfEmployment"> -->
+                <input class="form-control" [class.is-invalid]="formGroup.get('dateOfEmployment')?.invalid && 
+                    (formGroup.get('dateOfEmployment')?.dirty ||
+                    formGroup.get('dateOfEmployment')?.touched ||
+                    isSubmitted)" placeholder="Izaberite dadum zaposlenja" name="dp" ngbDatepicker
+                    #dpDateOfEmployment="ngbDatepicker" formControlName="dateOfEmployment"
+                    (click)="dpDateOfEmployment.toggle()" />
                 <span *ngIf="formGroup.get('dateOfEmployment')?.hasError('dateOfEmployment') && 
                     (formGroup.get('dateOfEmployment')?.dirty ||
                     formGroup.get('dateOfEmployment')?.touched ||

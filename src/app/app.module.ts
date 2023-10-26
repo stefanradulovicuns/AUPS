@@ -22,6 +22,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
 import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,9 @@ import { ProductionOrderInfoComponent } from './components/production-order-info
     NgbModule,
     NgbPaginationModule,
   ],
-  providers: [],
+  providers: [
+    DatePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

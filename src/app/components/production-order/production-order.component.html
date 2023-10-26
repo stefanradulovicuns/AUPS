@@ -89,10 +89,12 @@
                     (formGroup.get('startDate')?.dirty ||
                     formGroup.get('startDate')?.touched ||
                     isSubmitted)">Datum početka</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('startDate')?.invalid && 
-                    (formGroup.get('startDate')?.dirty ||
-                    formGroup.get('startDate')?.touched ||
-                    isSubmitted)" id="startDate" placeholder="Unesite datum početka" formControlName="startDate">
+                <input class="form-control" [class.is-invalid]="formGroup.get('startDate')?.invalid && 
+                (formGroup.get('startDate')?.dirty ||
+                formGroup.get('startDate')?.touched ||
+                isSubmitted)" placeholder="Izaberite dadum početka" name="dp" ngbDatepicker
+                    #dpStartDate="ngbDatepicker" formControlName="startDate" (click)="dpStartDate.toggle()" />
+                <!-- <button class="btn btn-outline-secondary bi bi-calendar3" type="button" (click)="d.toggle()"></button> -->
                 <span *ngIf="formGroup.get('startDate')?.hasError('startDate') && 
                     (formGroup.get('startDate')?.dirty ||
                     formGroup.get('startDate')?.touched ||
@@ -103,14 +105,17 @@
                     (formGroup.get('endDate')?.dirty ||
                     formGroup.get('endDate')?.touched ||
                     isSubmitted)">Datum završetka</label>
-                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('endDate')?.invalid && 
+                <input class="form-control" [class.is-invalid]="formGroup.get('endDate')?.invalid && 
+                (formGroup.get('endDate')?.dirty ||
+                formGroup.get('endDate')?.touched ||
+                isSubmitted)" placeholder="Izaberite dadum završetka" name="dp" ngbDatepicker
+                    #dpEndDate="ngbDatepicker" formControlName="endDate" (click)="dpEndDate.toggle()" />
+                <!-- <input type="text" class="form-control" [class.is-invalid]="formGroup.get('endDate')?.invalid && 
                     (formGroup.get('endDate')?.dirty ||
                     formGroup.get('endDate')?.touched ||
-                    isSubmitted)" id="endDate" placeholder="Unesite datum završetka" formControlName="endDate">
-                <span *ngIf="formGroup.get('endDate')?.hasError('endDate') && 
-                    (formGroup.get('endDate')?.dirty ||
-                    formGroup.get('endDate')?.touched ||
-                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+                    isSubmitted)" id="endDate" placeholder="Unesite datum završetka" formControlName="endDate"> -->
+                <span *ngIf=" formGroup.get('endDate')?.hasError('endDate') && (formGroup.get('endDate')?.dirty ||
+                    formGroup.get('endDate')?.touched || isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
             <div class="form-group">
                 <label for="quantity" [class.text-danger]="formGroup.get('quantity')?.invalid && 
@@ -135,23 +140,6 @@
                 <label for="manager">Menadžer</label>
                 <input type="text" class="form-control" id="manager" formControlName="manager">
             </div>
-            <!-- <div class="form-group">
-                <label for="employeeId" [class.text-danger]="formGroup.get('employeeId')?.invalid && 
-                    (formGroup.get('employeeId')?.dirty ||
-                    formGroup.get('employeeId')?.touched ||
-                    isSubmitted)">Employee</label>
-                <select type="text" class="form-select" [class.is-invalid]="formGroup.get('employeeId')?.invalid && 
-                    (formGroup.get('employeeId')?.dirty ||
-                    formGroup.get('employeeId')?.touched ||
-                    isSubmitted)" id="employeeId" placeholder="Unesite radnika" formControlName="employeeId">
-                    <option *ngFor="let employee of employees" [value]="employee.employeeId">{{
-                        employee.firstName }} {{ employee.lastName }}</option>
-                </select>
-                <span *ngIf="formGroup.get('employeeId')?.hasError('required') && 
-                    (formGroup.get('employeeId')?.dirty ||
-                    formGroup.get('employeeId')?.touched ||
-                    isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
-            </div> -->
             <div class="form-group">
                 <label for="objectOfLaborId" [class.text-danger]="formGroup.get('objectOfLaborId')?.invalid && 
                     (formGroup.get('objectOfLaborId')?.dirty ||
