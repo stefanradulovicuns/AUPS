@@ -41,7 +41,7 @@ export class EmployeeComponent implements OnInit {
     phoneNumber: ['', Validators.required],
     address: ['', Validators.required],
     city: ['', Validators.required],
-    sallary: [0, Validators.required],
+    sallary: ['', Validators.required],
     dateOfEmployment: ['', Validators.required],
     workplaceId: ['', Validators.required],
     organizationalUnitId: ['', Validators.required],
@@ -203,7 +203,7 @@ export class EmployeeComponent implements OnInit {
 
   onClickRow(employee: Employee) {
     const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData });
+    this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
     this.formGroup.disable();
     this.operation = 'REVIEW';
     this.open(this.modal);

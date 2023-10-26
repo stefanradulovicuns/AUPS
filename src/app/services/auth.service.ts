@@ -6,6 +6,7 @@ import { RegistrationRequest } from '../models/registrationRequest';
 import { AuthenticationResponse } from '../models/authenticationResponse';
 import { LoginRequest } from '../models/loginRequest';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Employee } from '../models/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,10 @@ export class AuthService {
 
   register(registrationRequest: RegistrationRequest): Observable<AuthenticationResponse> {
     return this.httpClient.post<AuthenticationResponse>(`${BACKEND_URL}Auth/register`, registrationRequest);
+  }
+
+  registerFirstUser(employee: Employee): Observable<AuthenticationResponse> {
+    return this.httpClient.post<AuthenticationResponse>(`${BACKEND_URL}Auth/registerFirstUser`, employee);
   }
 
   login(loginRequest: LoginRequest): Observable<AuthenticationResponse> {

@@ -29,6 +29,10 @@
             <th scope="col">Ime</th>
             <th scope="col">Prezime</th>
             <th scope="col">Email</th>
+            <th scope="col">Grad</th>
+            <th scope="col">Adresa</th>
+            <th scope="col">Radno mesto</th>
+            <th scope="col">Organizaciona jedinica</th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -37,6 +41,10 @@
             <td>{{ employee.firstName }}</td>
             <td>{{ employee.lastName }}</td>
             <td>{{ employee.email }}</td>
+            <td>{{ employee.city }}</td>
+            <td>{{ employee.address }}</td>
+            <td>{{ employee.workplaceName }}</td>
+            <td>{{ employee.organizationalUnitName }}</td>
             <td>
                 <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, employee)">Izmeni</button>
                 <button type="button" class="btn btn-danger" (click)="onClickDelete($event, employee)">Obriši</button>
