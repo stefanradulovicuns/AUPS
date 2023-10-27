@@ -5,7 +5,7 @@
         <ul>
             <li class="card-text">Datum početka: {{ productionOrder.startDate | date: 'dd/MM/yyyy' }}</li>
             <li class="card-text">Datum završetka: {{ productionOrder.endDate | date: 'dd/MM/yyyy' }}</li>
-            <li class="card-text" [routerLink]="['/objectOfLabor', productionOrder.objectOfLaborId]">Predmet rada: {{
+            <li class="card-text" [routerLink]="['/predmeti-rada', productionOrder.objectOfLaborId]">Predmet rada: {{
                 productionOrder.objectOfLaborName }}</li>
             <li class="card-text">Količinа: {{ productionOrder.quantity }}</li>
             <li class="card-text">Menadžer: {{ productionOrder.manager }}</li>

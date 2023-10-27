@@ -76,7 +76,7 @@ export class RegistrationComponent implements OnInit {
       this.authService.registerFirstUser(employee).subscribe({
         next: (data) => {
           localStorage.setItem("accessToken", data.token ? data.token : '');
-          this.router.navigate(['/employee']);
+          this.router.navigate(['/radnici']);
         },
 
         error: (error) => {

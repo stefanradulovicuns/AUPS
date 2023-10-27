@@ -20,30 +20,30 @@ import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/ob
 import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'employee', pathMatch: 'full' },
+  { path: '', redirectTo: 'radnici', pathMatch: 'full' },
   {
     path: '', component: NavigationComponent, children: [
       { path: 'login', component: LoginComponent },
-      { path: 'registration', component: RegistrationComponent },
+      { path: 'registracija', component: RegistrationComponent },
       {
-        path: 'employee',
+        path: 'radnici',
         component: EmployeeComponent,
         canActivate: [roleGuard],
         data: {
           expectedRole: 'Admin'
         }
       },
-      { path: 'workplace', component: WorkplaceComponent },
-      { path: 'organizationalUnit', component: OrganizationalUnitComponent },
-      { path: 'productionOrder', component: ProductionOrderComponent },
-      { path: 'productionOrder/:id', component: ProductionOrderInfoComponent },
-      { path: 'objectOfLabor', component: ObjectOfLaborComponent },
-      { path: 'objectOfLabor/:id', component: ObjectOfLaborInfoComponent },
-      { path: 'warehouse', component: WarehouseComponent },
-      { path: 'productionPlan', component: ProductionPlanComponent },
-      { path: 'plant', component: PlantComponent },
-      { path: 'technologicalSystem', component: TechnologicalSystemComponent },
-      { path: 'technologicalProcedure', component: TechnologicalProcedureComponent }
+      { path: 'radna-mesta', component: WorkplaceComponent },
+      { path: 'organizacione-jedinice', component: OrganizationalUnitComponent },
+      { path: 'nalozi-za-proizvodnju', component: ProductionOrderComponent },
+      { path: 'prnalozi-za-proizvodnjuoductionOrder/:id', component: ProductionOrderInfoComponent },
+      { path: 'predmeti-rada', component: ObjectOfLaborComponent },
+      { path: 'predmeti-rada/:id', component: ObjectOfLaborInfoComponent },
+      { path: 'skladista', component: WarehouseComponent },
+      { path: 'planovi-proizvodnje', component: ProductionPlanComponent },
+      { path: 'pogoni', component: PlantComponent },
+      { path: 'tehnoloski-sistemi', component: TechnologicalSystemComponent },
+      { path: 'tehnoloski-postupci', component: TechnologicalProcedureComponent }
     ]
   },
 ];

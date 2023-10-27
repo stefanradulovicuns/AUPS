@@ -39,7 +39,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let productionOrder of productionOrders"
-            [routerLink]="['/productionOrder', productionOrder.productionOrderId]">
+            [routerLink]="['/nalozi-za-proizvodnju', productionOrder.productionOrderId]">
             <td>{{ productionOrder.startDate | date: 'dd/MM/yyyy' }}</td>
             <td>{{ productionOrder.endDate | date: 'dd/MM/yyyy' }}</td>
             <td>{{ productionOrder.objectOfLaborName }}</td>

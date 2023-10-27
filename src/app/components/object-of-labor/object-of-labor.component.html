@@ -36,7 +36,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let objectOfLabor of objectOfLabors"
-            [routerLink]="['/objectOfLabor', objectOfLabor.objectOfLaborId]">
+            [routerLink]="['/predmeti-rada', objectOfLabor.objectOfLaborId]">
             <td>{{ objectOfLabor.objectOfLaborName }}</td>
             <td>{{ objectOfLabor.price | number: '.2-2' }} RSD</td>
             <td>{{ objectOfLabor.warehouseFullAddress }}</td>
