@@ -33,6 +33,10 @@ export class ProductionOrderService {
     return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
   }
 
+  startNextTechnologicalProcedure(productionOrder: ProductionOrder): Observable<ProductionOrder> {
+    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/startNextTechnologicalProcedure`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
+  }
+
   finishCurrentTechnologicalProcedure(productionOrder: ProductionOrder): Observable<ProductionOrder> {
     return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/finishCurrentTechnologicalProcedure`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
   }

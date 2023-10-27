@@ -5,6 +5,7 @@ export class ObjectOfLaborTechnologicalProcedure {
     objectOfLaborName: string | null = null;
     technologicalProcedureId: string | null = null;
     technologicalProcedureName: string | null = null;
+    technologicalProcedureDuration: number | null = null;
     technologicalSystemName: string | null = null;
     plantName: string | null = null;
     organizationalUnitName: string | null = null;

@@ -128,7 +128,7 @@
                 || formGroup.get('email')?.touched
                 || isSubmitted)" class="text-danger">Email adresa mora biti u ispravnom formatu</span>
             </div>
-            <div class="form-group">
+            <div *ngIf="operation==='CREATE' || operation==='UPDATE'" class="form-group">
                 <label for="password" [class.text-danger]="formGroup.get('password')?.invalid && 
                 (formGroup.get('password')?.dirty ||
                 formGroup.get('password')?.touched ||
@@ -142,7 +142,7 @@
                 formGroup.get('password')?.touched ||
                 isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
-            <div class="form-group">
+            <div *ngIf="operation==='CREATE' || operation==='UPDATE'" class="form-group">
                 <label for="confirmPassword" [class.text-danger]="formGroup.get('confirmPassword')?.invalid && 
                 (formGroup.get('confirmPassword')?.dirty ||
                 formGroup.get('confirmPassword')?.touched ||

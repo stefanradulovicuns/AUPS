@@ -61,4 +61,24 @@ export class ProductionOrderInfoComponent implements OnInit {
     }
   }
 
+  onStartTechnologicalProcedureClicked(event: boolean) {
+    if (event && this.productionOrder) {
+      this.productionOrderService.startNextTechnologicalProcedure(this.productionOrder).subscribe({
+        next: (data) => {
+          this.productionOrder = data;
+        },
+
+        error: (error) => {
+          console.log(error);
+          this.toastMessage = 'Došlo je do greške';
+          this.isError = true;
+        },
+
+        complete: () => {
+
+        }
+      });
+    }
+  }
+
 }

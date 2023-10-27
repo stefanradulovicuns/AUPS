@@ -5,7 +5,8 @@
         <ul>
             <li class="card-text">Datum početka: {{ productionOrder.startDate | date: 'dd/MM/yyyy' }}</li>
             <li class="card-text">Datum završetka: {{ productionOrder.endDate | date: 'dd/MM/yyyy' }}</li>
-            <li class="card-text">Predmet rada: {{ productionOrder.objectOfLaborName }}</li>
+            <li class="card-text" [routerLink]="['/objectOfLabor', productionOrder.objectOfLaborId]">Predmet rada: {{
+                productionOrder.objectOfLaborName }}</li>
             <li class="card-text">Količinа: {{ productionOrder.quantity }}</li>
             <li class="card-text">Menadžer: {{ productionOrder.manager }}</li>
         </ul>
@@ -18,8 +19,11 @@
         <h5 class="card-title">Spisak tehnoloških postupaka</h5>
         <app-object-of-labor-technological-procedure *ngIf="productionOrder.objectOfLaborId"
             [objectOfLaborId]="productionOrder.objectOfLaborId" [showCurrentState]="true"
-            [currentTechnologicalProcedure]="productionOrder.currentTechnologicalProcedure" [showAdminButtons]="false"
-            [showFinishButton]="true"
-            (finishTechnologicalProcedureBtnClicked)="onFinishTechnologicalProcedureClicked($event)"></app-object-of-labor-technological-procedure>
+            [currentTechnologicalProcedure]="productionOrder.currentTechnologicalProcedure"
+            [currentTechnologicalProcedureExecuted]="productionOrder.currentTechnologicalProcedureExecuted"
+            [showAdminButtons]="false" [showStartButton]="true" [showFinishButton]="true"
+            (finishTechnologicalProcedureBtnClicked)="onFinishTechnologicalProcedureClicked($event)"
+            (startTechnologicalProcedureBtnClicked)="onStartTechnologicalProcedureClicked($event)">
+        </app-object-of-labor-technological-procedure>
     </div>
 </div>

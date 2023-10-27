@@ -16,9 +16,12 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   @Input() objectOfLaborId: string = '';
   @Input() showCurrentState: boolean = false;
   @Input() currentTechnologicalProcedure: number | null = null;
+  @Input() currentTechnologicalProcedureExecuted: boolean | null = null;
   @Input() showAdminButtons: boolean = false;
+  @Input() showStartButton: boolean = false;
   @Input() showFinishButton: boolean = false;
 
+  @Output() startTechnologicalProcedureBtnClicked = new EventEmitter<boolean>();
   @Output() finishTechnologicalProcedureBtnClicked = new EventEmitter<boolean>();
 
   @ViewChild('content') modal!: ElementRef;
@@ -179,7 +182,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   }
 
   onClickRow(objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
-    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalProcedureDuration, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -195,7 +198,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickUpdate(event: Event, objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalProcedureDuration, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -204,7 +207,7 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
 
   onClickDelete(event: Event, objectOfLaborTechnologicalProcedure: ObjectOfLaborTechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
+    const { totalCount, objectOfLaborId, objectOfLaborName, technologicalProcedureName, technologicalProcedureDuration, technologicalSystemName, plantName, organizationalUnitName, ...objectOfLaborTechnologicalProcedureData } = objectOfLaborTechnologicalProcedure;
     this.formGroup.setValue({ ...objectOfLaborTechnologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'DELETE';
@@ -214,8 +217,14 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   onClickFinish(event: Event) {
     event.stopPropagation();
     if (window.confirm('Da li ste sigurni da želite da završite tehnološki postupak?')) {
-      console.log(1);
       this.finishTechnologicalProcedureBtnClicked.emit(true);
+    }
+  }
+
+  onClickStart(event: Event) {
+    event.stopPropagation();
+    if (window.confirm('Da li ste sigurni da želite da započnete tehnološki postupak?')) {
+      this.startTechnologicalProcedureBtnClicked.emit(true);
     }
   }
 
@@ -237,4 +246,5 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
     this.toastMessage = null;
     this.isError = false;
   }
+
 }

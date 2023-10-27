@@ -5,6 +5,7 @@ export class ProductionOrder {
     quantity: number | null = null;
     note: string | null = null;
     currentTechnologicalProcedure: number | null = null;
+    currentTechnologicalProcedureExecuted: boolean | null = null;
     currentState: number | null = null;
     employeeId: string | null = null;
     manager: string | null = null;

@@ -173,7 +173,7 @@ export class ObjectOfLaborComponent implements OnInit {
   }
 
   onClickRow(objectOfLabor: ObjectOfLabor) {
-    const { totalCount, ...objectOfLaborData } = objectOfLabor;
+    const { totalCount, warehouseFullAddress, ...objectOfLaborData } = objectOfLabor;
     this.formGroup.setValue({ ...objectOfLaborData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -189,7 +189,7 @@ export class ObjectOfLaborComponent implements OnInit {
 
   onClickUpdate(event: Event, objectOfLabor: ObjectOfLabor) {
     event.stopPropagation();
-    const { totalCount, ...objectOfLaborData } = objectOfLabor;
+    const { totalCount, warehouseFullAddress, ...objectOfLaborData } = objectOfLabor;
     this.formGroup.setValue({ ...objectOfLaborData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -198,7 +198,7 @@ export class ObjectOfLaborComponent implements OnInit {
 
   onClickDelete(event: Event, objectOfLabor: ObjectOfLabor) {
     event.stopPropagation();
-    const { totalCount, ...objectOfLaborData } = objectOfLabor;
+    const { totalCount, warehouseFullAddress, ...objectOfLaborData } = objectOfLabor;
     this.formGroup.setValue({ ...objectOfLaborData });
     this.formGroup.disable();
     this.operation = 'DELETE';

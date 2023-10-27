@@ -10,6 +10,7 @@
             (ngModelChange)="getObjectOfLaborTechnologicalProcedures()">
             <option [ngValue]="'OrderOfExecution'" selected>Redosled izvršavanja</option>
             <option [ngValue]="'TechnologicalProcedureName'">Tehnološki postupak</option>
+            <option [ngValue]="'TechnologicalProcedureDurtaion'">Vreme trajanja</option>
             <option [ngValue]="'TechnologicalSystemName'">Tehnološki sistem</option>
             <option [ngValue]="'PlantName'">Pogon</option>
             <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
@@ -32,9 +33,11 @@
         <tr>
             <th scope="col">Redosled izvršavanja</th>
             <th scope="col">Tehnološki postupak</th>
+            <th scope="col">Vreme trajanja</th>
             <th scope="col">Tehnološki sistem</th>
             <th scope="col">Pogon</th>
             <th scope="col">Organizaciona jedinica</th>
+            <th scope="col">Izvršilac</th>
             <th *ngIf="showCurrentState" scope="col">Stanje</th>
             <th scope="col"></th>
         </tr>
@@ -44,18 +47,21 @@
             (click)="onClickRow(objectOfLaborTechnologicalProcedure)">
             <td>{{ objectOfLaborTechnologicalProcedure.orderOfExecution }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.technologicalProcedureName }}</td>
+            <td>{{ objectOfLaborTechnologicalProcedure.technologicalProcedureDuration | number }} min</td>
             <td>{{ objectOfLaborTechnologicalProcedure.technologicalSystemName }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.plantName }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.organizationalUnitName }}</td>
+            <td>/</td>
             <td *ngIf="showCurrentState && currentTechnologicalProcedure !== null">
                 <span
-                    *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedure + 1 > objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && (currentTechnologicalProcedure > objectOfLaborTechnologicalProcedure.orderOfExecution || (currentTechnologicalProcedure === objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedureExecuted === false))"
                     class="text-success">Završeno</span>
-                <span *ngIf="currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution"
+                <span
+                    *ngIf="currentTechnologicalProcedureExecuted === true && currentTechnologicalProcedure === objectOfLaborTechnologicalProcedure.orderOfExecution"
                     class="text-warning">U
                     procesu izvršenja</span>
                 <span
-                    *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedure + 1 < objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedure < objectOfLaborTechnologicalProcedure.orderOfExecution"
                     class="text-danger">Nije
                     započeto</span>
             </td>
@@ -64,8 +70,16 @@
                     (click)="onClickUpdate($event, objectOfLaborTechnologicalProcedure)">Izmeni</button>
                 <button *ngIf="showAdminButtons" type="button" class="btn btn-danger"
                     (click)="onClickDelete($event, objectOfLaborTechnologicalProcedure)">Obriši</button>
-                <button
-                    *ngIf="showFinishButton && currentTechnologicalProcedure && currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution"
+                <button *ngIf="showStartButton && 
+                    currentTechnologicalProcedureExecuted === false && 
+                    objectOfLaborTechnologicalProcedure.orderOfExecution && 
+                    currentTechnologicalProcedure !== null && 
+                    currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution"
+                    type="button" class="btn btn-success" (click)="onClickStart($event)">Započni</button>
+                <button *ngIf="showFinishButton && 
+                    currentTechnologicalProcedureExecuted === true && 
+                    currentTechnologicalProcedure && 
+                    currentTechnologicalProcedure === objectOfLaborTechnologicalProcedure.orderOfExecution"
                     type="button" class="btn btn-success" (click)="onClickFinish($event)">Završi</button>
             </td>
         </tr>
@@ -74,8 +88,9 @@
 
 <ngb-progressbar
     *ngIf="showCurrentState && currentTechnologicalProcedure !== null && objectOfLaborTechnologicalProceduresTotalCount !== null"
-    [showValue]="true" type="success"
-    [value]="(currentTechnologicalProcedure / objectOfLaborTechnologicalProceduresTotalCount) * 100"></ngb-progressbar>
+    [showValue]="true" type="success" [value]="currentTechnologicalProcedureExecuted ?
+    ((currentTechnologicalProcedure - 1) / objectOfLaborTechnologicalProceduresTotalCount) * 100 :
+    (currentTechnologicalProcedure / objectOfLaborTechnologicalProceduresTotalCount) * 100"></ngb-progressbar>
 
 <div class="d-flex justify-content-between p-2">
     <ngb-pagination *ngIf="objectOfLaborTechnologicalProceduresTotalCount"

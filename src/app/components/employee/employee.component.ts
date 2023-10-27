@@ -202,8 +202,8 @@ export class EmployeeComponent implements OnInit {
   }
 
   onClickRow(employee: Employee) {
-    const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
+    const { totalCount, workplaceName, organizationalUnitName, ...employeeData } = employee;
+    this.formGroup.setValue({ ...employeeData, password: '', confirmPassword: '' });
     this.formGroup.disable();
     this.operation = 'REVIEW';
     this.open(this.modal);
@@ -211,6 +211,10 @@ export class EmployeeComponent implements OnInit {
 
   onClickAdd() {
     this.formGroup.reset();
+    this.formGroup.get('password')?.setValidators([Validators.required]);
+    this.formGroup.get('password')?.updateValueAndValidity();
+    this.formGroup.get('confirmPassword')?.setValidators([Validators.required]);
+    this.formGroup.get('confirmPassword')?.updateValueAndValidity();
     this.formGroup.enable();
     this.operation = 'CREATE';
     this.open(this.modal);
@@ -218,8 +222,12 @@ export class EmployeeComponent implements OnInit {
 
   onClickUpdate(event: Event, employee: Employee) {
     event.stopPropagation();
-    const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
+    const { totalCount, workplaceName, organizationalUnitName, ...employeeData } = employee;
+    this.formGroup.get('password')?.clearValidators();
+    this.formGroup.get('password')?.updateValueAndValidity();
+    this.formGroup.get('confirmPassword')?.clearValidators();
+    this.formGroup.get('confirmPassword')?.updateValueAndValidity();
+    this.formGroup.setValue({ ...employeeData, password: '', confirmPassword: '' });
     this.setFormDateValues(employee);
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -228,8 +236,8 @@ export class EmployeeComponent implements OnInit {
 
   onClickDelete(event: Event, employee: Employee) {
     event.stopPropagation();
-    const { totalCount, ...employeeData } = employee;
-    this.formGroup.setValue({ ...employeeData, confirmPassword: employee.password });
+    const { totalCount, workplaceName, organizationalUnitName, ...employeeData } = employee;
+    this.formGroup.setValue({ ...employeeData, password: '', confirmPassword: '' });
     this.setFormDateValues(employee);
     this.formGroup.disable();
     this.operation = 'DELETE';

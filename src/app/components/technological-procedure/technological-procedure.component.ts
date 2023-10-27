@@ -215,7 +215,7 @@ export class TechnologicalProcedureComponent {
   }
 
   onClickRow(technologicalProcedure: TechnologicalProcedure) {
-    const { totalCount, ...technologicalProcedureData } = technologicalProcedure;
+    const { totalCount, organizationalUnitName, technologicalSystemName, plantName, ...technologicalProcedureData } = technologicalProcedure;
     this.formGroup.setValue({ ...technologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -231,7 +231,7 @@ export class TechnologicalProcedureComponent {
 
   onClickUpdate(event: Event, technologicalProcedure: TechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, ...technologicalProcedureData } = technologicalProcedure;
+    const { totalCount, organizationalUnitName, technologicalSystemName, plantName, ...technologicalProcedureData } = technologicalProcedure;
     this.formGroup.setValue({ ...technologicalProcedureData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -240,7 +240,7 @@ export class TechnologicalProcedureComponent {
 
   onClickDelete(event: Event, technologicalProcedure: TechnologicalProcedure) {
     event.stopPropagation();
-    const { totalCount, ...technologicalProcedureData } = technologicalProcedure;
+    const { totalCount, organizationalUnitName, technologicalSystemName, plantName, ...technologicalProcedureData } = technologicalProcedure;
     this.formGroup.setValue({ ...technologicalProcedureData });
     this.formGroup.disable();
     this.operation = 'DELETE';

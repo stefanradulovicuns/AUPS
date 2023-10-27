@@ -171,7 +171,7 @@ export class ProductionPlanComponent implements OnInit {
   }
 
   onClickRow(productionPlan: ProductionPlan) {
-    const { totalCount, ...productionPlanData } = productionPlan;
+    const { totalCount, objectOfLaborName, ...productionPlanData } = productionPlan;
     this.formGroup.setValue({ ...productionPlanData });
     this.formGroup.disable();
     this.operation = 'REVIEW';
@@ -187,7 +187,7 @@ export class ProductionPlanComponent implements OnInit {
 
   onClickUpdate(event: Event, productionPlan: ProductionPlan) {
     event.stopPropagation();
-    const { totalCount, ...productionPlanData } = productionPlan;
+    const { totalCount, objectOfLaborName, ...productionPlanData } = productionPlan;
     this.formGroup.setValue({ ...productionPlanData });
     this.formGroup.enable();
     this.operation = 'UPDATE';
@@ -196,7 +196,7 @@ export class ProductionPlanComponent implements OnInit {
 
   onClickDelete(event: Event, productionPlan: ProductionPlan) {
     event.stopPropagation();
-    const { totalCount, ...productionPlanData } = productionPlan;
+    const { totalCount, objectOfLaborName, ...productionPlanData } = productionPlan;
     this.formGroup.setValue({ ...productionPlanData });
     this.formGroup.disable();
     this.operation = 'DELETE';
