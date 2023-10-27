@@ -66,21 +66,24 @@
                     započeto</span>
             </td>
             <td>
-                <button *ngIf="showAdminButtons" type="button" class="btn btn-primary"
+                <button *ngIf="showAdminButtons && authService.isInRole(['Admin'])" type="button"
+                    class="btn btn-primary btn-edit"
                     (click)="onClickUpdate($event, objectOfLaborTechnologicalProcedure)">Izmeni</button>
-                <button *ngIf="showAdminButtons" type="button" class="btn btn-danger"
+                <button *ngIf="showAdminButtons && authService.isInRole(['Admin'])" type="button" class="btn btn-danger"
                     (click)="onClickDelete($event, objectOfLaborTechnologicalProcedure)">Obriši</button>
                 <button *ngIf="showStartButton && 
                     currentTechnologicalProcedureExecuted === false && 
                     objectOfLaborTechnologicalProcedure.orderOfExecution && 
                     currentTechnologicalProcedure !== null && 
-                    currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution"
-                    type="button" class="btn btn-success" (click)="onClickStart($event)">Započni</button>
+                    currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution &&
+                    authService.isInRole(['Radnik u proizvodnji'])" type="button" class="btn btn-success"
+                    (click)="onClickStart($event)">Započni</button>
                 <button *ngIf="showFinishButton && 
                     currentTechnologicalProcedureExecuted === true && 
                     currentTechnologicalProcedure && 
-                    currentTechnologicalProcedure === objectOfLaborTechnologicalProcedure.orderOfExecution"
-                    type="button" class="btn btn-success" (click)="onClickFinish($event)">Završi</button>
+                    currentTechnologicalProcedure === objectOfLaborTechnologicalProcedure.orderOfExecution &&
+                    authService.isInRole(['Radnik u proizvodnji'])" type="button" class="btn btn-success"
+                    (click)="onClickFinish($event)">Završi</button>
             </td>
         </tr>
     </tbody>
@@ -106,7 +109,8 @@
     </select>
 </div>
 
-<button *ngIf="showAdminButtons" type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
+<button *ngIf="showAdminButtons && authService.isInRole(['Admin'])" type="button" class="btn btn-primary btn-add"
+    (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -166,10 +170,6 @@
         </div>
     </form>
 </ng-template>
-
-<hr />
-
-<pre>{{ closeResult }}</pre>
 
 <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
     [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

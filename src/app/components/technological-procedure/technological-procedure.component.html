@@ -1,72 +1,84 @@
-<div class="row">
-    <div class="col-md-3">
-        <label for="search">Pretraga</label>
-        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
-            placeholder="Pretraži tehnološke postupke" />
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Sortiraj prema</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getTechnologicalProcedures()">
-            <option [ngValue]="'TechnologicalProcedureName'" selected>Naziv tehnološkog postupka</option>
-            <option [ngValue]="'Duration'">Vreme trajanja</option>
-            <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
-            <option [ngValue]="'TechnologicalSystemName'">Tehnološki sistem</option>
-            <option [ngValue]="'Plant'">Pogon</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Redosled sortiranja</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getTechnologicalProcedures()">
-            <option [ngValue]="'ASC'" selected>Rastuće</option>
-            <option [ngValue]="'DESC'">Opadajuće</option>
-        </select>
+<div class="container info-section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Tehnološki postupci</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Informacije o tehnološkim postupcima</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="search">Pretraga</label>
+                    <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search"
+                        (input)="onInputSearch()" placeholder="Pretraži tehnološke postupke" />
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Sortiraj prema</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortBy"
+                        (ngModelChange)="getTechnologicalProcedures()">
+                        <option [ngValue]="'TechnologicalProcedureName'" selected>Naziv tehnološkog postupka</option>
+                        <option [ngValue]="'Duration'">Vreme trajanja</option>
+                        <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
+                        <option [ngValue]="'TechnologicalSystemName'">Tehnološki sistem</option>
+                        <option [ngValue]="'Plant'">Pogon</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Redosled sortiranja</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortOrder"
+                        (ngModelChange)="getTechnologicalProcedures()">
+                        <option [ngValue]="'ASC'" selected>Rastuće</option>
+                        <option [ngValue]="'DESC'">Opadajuće</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Naziv tehnološkog postupka</th>
+                        <th scope="col">Vreme trajanja</th>
+                        <th scope="col">Organizaciona jedinica</th>
+                        <th scope="col">Tehnološki sistem</th>
+                        <th scope="col">Pogon</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let technologicalProcedure of technologicalProcedures"
+                        (click)="onClickRow(technologicalProcedure)">
+                        <td>{{ technologicalProcedure.technologicalProcedureName }}</td>
+                        <td>{{ technologicalProcedure.duration | number }} min</td>
+                        <td>{{ technologicalProcedure.organizationalUnitName }}</td>
+                        <td>{{ technologicalProcedure.technologicalSystemName }}</td>
+                        <td>{{ technologicalProcedure.plantName }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-edit"
+                                (click)="onClickUpdate($event, technologicalProcedure)">Izmeni</button>
+                            <button type="button" class="btn btn-danger"
+                                (click)="onClickDelete($event, technologicalProcedure)">Obriši</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between p-2">
+                <ngb-pagination *ngIf="technologicalProceduresTotalCount"
+                    [collectionSize]="technologicalProceduresTotalCount" [(page)]="page" [pageSize]="count"
+                    (pageChange)="getTechnologicalProcedures()">
+                </ngb-pagination>
+
+                <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+                    (ngModelChange)="getTechnologicalProcedures()">
+                    <option [ngValue]="2">2 stavke po strani</option>
+                    <option [ngValue]="5">5 stavki po strani</option>
+                    <option [ngValue]="10">10 stavki po strani</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-add" (click)="onClickAdd()">Dodaj</button>
+        </div>
     </div>
 </div>
-
-<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Naziv tehnološkog postupka</th>
-            <th scope="col">Vreme trajanja</th>
-            <th scope="col">Organizaciona jedinica</th>
-            <th scope="col">Tehnološki sistem</th>
-            <th scope="col">Pogon</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let technologicalProcedure of technologicalProcedures" (click)="onClickRow(technologicalProcedure)">
-            <td>{{ technologicalProcedure.technologicalProcedureName }}</td>
-            <td>{{ technologicalProcedure.duration | number }} min</td>
-            <td>{{ technologicalProcedure.organizationalUnitName }}</td>
-            <td>{{ technologicalProcedure.technologicalSystemName }}</td>
-            <td>{{ technologicalProcedure.plantName }}</td>
-            <td>
-                <button type="button" class="btn btn-primary"
-                    (click)="onClickUpdate($event, technologicalProcedure)">Izmeni</button>
-                <button type="button" class="btn btn-danger"
-                    (click)="onClickDelete($event, technologicalProcedure)">Obriši</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="d-flex justify-content-between p-2">
-    <ngb-pagination *ngIf="technologicalProceduresTotalCount" [collectionSize]="technologicalProceduresTotalCount"
-        [(page)]="page" [pageSize]="count" (pageChange)="getTechnologicalProcedures()">
-    </ngb-pagination>
-
-    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
-        (ngModelChange)="getTechnologicalProcedures()">
-        <option [ngValue]="2">2 stavke po strani</option>
-        <option [ngValue]="5">5 stavki po strani</option>
-        <option [ngValue]="10">10 stavki po strani</option>
-    </select>
-</div>
-
-<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -174,10 +186,6 @@
         </div>
     </form>
 </ng-template>
-
-<hr />
-
-<pre>{{ closeResult }}</pre>
 
 <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
     [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

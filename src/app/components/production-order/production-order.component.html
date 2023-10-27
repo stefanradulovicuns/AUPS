@@ -1,76 +1,92 @@
-<div class="row">
-    <div class="col-md-3">
-        <label for="search">Pretraga</label>
-        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
-            placeholder="Pretraži naloge za proizvodnju" />
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Sortiraj prema</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getProductionOrders()">
-            <option [ngValue]="'StartDate'" selected>Datum početka</option>
-            <option [ngValue]="'EndDate'">Datum završetka</option>
-            <option [ngValue]="'ObjectOfLaborName'">Predmet rada</option>
-            <option [ngValue]="'Quantity'">Količina</option>
-            <option [ngValue]="'Manager'">Menadžer</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Redosled sortiranja</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getProductionOrders()">
-            <option [ngValue]="'ASC'" selected>Rastuće</option>
-            <option [ngValue]="'DESC'">Opadajuće</option>
-        </select>
+<div class="container info-section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Nalozi za proizvodnju</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Informacije o nalozima za proizvodnju</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="search">Pretraga</label>
+                    <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search"
+                        (input)="onInputSearch()" placeholder="Pretraži naloge za proizvodnju" />
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Sortiraj prema</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortBy"
+                        (ngModelChange)="getProductionOrders()">
+                        <option [ngValue]="'StartDate'" selected>Datum početka</option>
+                        <option [ngValue]="'EndDate'">Datum završetka</option>
+                        <option [ngValue]="'ObjectOfLaborName'">Predmet rada</option>
+                        <option [ngValue]="'Quantity'">Količina</option>
+                        <option [ngValue]="'Manager'">Menadžer</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Redosled sortiranja</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortOrder"
+                        (ngModelChange)="getProductionOrders()">
+                        <option [ngValue]="'ASC'" selected>Rastuće</option>
+                        <option [ngValue]="'DESC'">Opadajuće</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Datum početka</th>
+                        <th scope="col">Datum završetka</th>
+                        <th scope="col">Predmet rada</th>
+                        <th scope="col">Količina</th>
+                        <th scope="col">Menadžer</th>
+                        <th scope="col">Stanje</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let productionOrder of productionOrders"
+                        [routerLink]="['/nalozi-za-proizvodnju', productionOrder.productionOrderId]">
+                        <td>{{ productionOrder.startDate | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ productionOrder.endDate | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ productionOrder.objectOfLaborName }}</td>
+                        <td>{{ productionOrder.quantity }}</td>
+                        <td>{{ productionOrder.manager }}</td>
+                        <td><ngb-progressbar type="success"
+                                [value]="productionOrder.currentState ? productionOrder.currentState : 0"></ngb-progressbar>
+                        </td>
+                        <td>
+                            <button
+                                *ngIf="authService.isInRole(['Menadzer']) && productionOrder.managerEmail && authService.isCurrentUserEmail(productionOrder.managerEmail)"
+                                type="button" class="btn btn-primary btn-edit"
+                                (click)="onClickUpdate($event, productionOrder)">Izmeni</button>
+                            <button
+                                *ngIf="authService.isInRole(['Menadzer']) && productionOrder.managerEmail && authService.isCurrentUserEmail(productionOrder.managerEmail)"
+                                type="button" class="btn btn-danger"
+                                (click)="onClickDelete($event, productionOrder)">Obriši</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between p-2">
+                <ngb-pagination *ngIf="productionOrdersTotalCount" [collectionSize]="productionOrdersTotalCount"
+                    [(page)]="page" [pageSize]="count" (pageChange)="getProductionOrders()">
+                </ngb-pagination>
+
+                <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+                    (ngModelChange)="getProductionOrders()">
+                    <option [ngValue]="2">2 stavke po strani</option>
+                    <option [ngValue]="5">5 stavki po strani</option>
+                    <option [ngValue]="10">10 stavki po strani</option>
+                </select>
+            </div>
+
+            <button *ngIf="authService.isInRole(['Menadzer'])" type="button" class="btn btn-primary btn-add"
+                (click)="onClickAdd()">Dodaj</button>
+        </div>
     </div>
 </div>
-
-<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Datum početka</th>
-            <th scope="col">Datum završetka</th>
-            <th scope="col">Predmet rada</th>
-            <th scope="col">Količina</th>
-            <th scope="col">Menadžer</th>
-            <th scope="col">Stanje</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let productionOrder of productionOrders"
-            [routerLink]="['/nalozi-za-proizvodnju', productionOrder.productionOrderId]">
-            <td>{{ productionOrder.startDate | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ productionOrder.endDate | date: 'dd/MM/yyyy' }}</td>
-            <td>{{ productionOrder.objectOfLaborName }}</td>
-            <td>{{ productionOrder.quantity }}</td>
-            <td>{{ productionOrder.manager }}</td>
-            <td><ngb-progressbar type="success"
-                    [value]="productionOrder.currentState ? productionOrder.currentState : 0"></ngb-progressbar></td>
-            <td>
-                <button type="button" class="btn btn-primary"
-                    (click)="onClickUpdate($event, productionOrder)">Izmeni</button>
-                <button type="button" class="btn btn-danger"
-                    (click)="onClickDelete($event, productionOrder)">Obriši</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="d-flex justify-content-between p-2">
-    <ngb-pagination *ngIf="productionOrdersTotalCount" [collectionSize]="productionOrdersTotalCount" [(page)]="page"
-        [pageSize]="count" (pageChange)="getProductionOrders()">
-    </ngb-pagination>
-
-    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
-        (ngModelChange)="getProductionOrders()">
-        <option [ngValue]="2">2 stavke po strani</option>
-        <option [ngValue]="5">5 stavki po strani</option>
-        <option [ngValue]="10">10 stavki po strani</option>
-    </select>
-</div>
-
-<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -110,10 +126,6 @@
                 formGroup.get('endDate')?.touched ||
                 isSubmitted)" placeholder="Izaberite dadum završetka" name="dp" ngbDatepicker
                     #dpEndDate="ngbDatepicker" formControlName="endDate" (click)="dpEndDate.toggle()" />
-                <!-- <input type="text" class="form-control" [class.is-invalid]="formGroup.get('endDate')?.invalid && 
-                    (formGroup.get('endDate')?.dirty ||
-                    formGroup.get('endDate')?.touched ||
-                    isSubmitted)" id="endDate" placeholder="Unesite datum završetka" formControlName="endDate"> -->
                 <span *ngIf=" formGroup.get('endDate')?.hasError('endDate') && (formGroup.get('endDate')?.dirty ||
                     formGroup.get('endDate')?.touched || isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
             </div>
@@ -168,10 +180,6 @@
         </div>
     </form>
 </ng-template>
-
-<hr />
-
-<pre>{{ closeResult }}</pre>
 
 <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
     [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

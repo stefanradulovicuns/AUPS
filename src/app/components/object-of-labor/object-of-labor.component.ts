@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ObjectOfLabor } from 'src/app/models/objectOfLabor';
 import { Warehouse } from 'src/app/models/warehouse';
+import { AuthService } from 'src/app/services/auth.service';
 import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
 import { WarehouseService } from 'src/app/services/warehouse.service';
 
@@ -47,7 +48,8 @@ export class ObjectOfLaborComponent implements OnInit {
   constructor(private objectOfLaborService: ObjectOfLaborService,
     private warehouseService: WarehouseService,
     private modalService: NgbModal,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    public authService: AuthService) { }
 
   ngOnInit(): void {
     this.getObjectOfLabors();

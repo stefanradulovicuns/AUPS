@@ -17,5 +17,9 @@ export const roleGuard: CanActivateFn = (route, state) => {
   //   inject(Router).navigate(['login']);
   // }
   // return false;
+  if (inject(AuthService).isInRole(route.data['expectedRoles'])) {
+    return true;
+  }
+  inject(Router).navigate(['login']);
   return true;
 };

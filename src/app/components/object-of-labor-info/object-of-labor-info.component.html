@@ -1,17 +1,17 @@
-<div *ngIf="objectOfLabor" class="card">
+<div *ngIf="objectOfLabor" class="container card info-section">
     <div class="card-body">
         <h5 class="card-title">{{ objectOfLabor.objectOfLaborName }}</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">Informacije</h6>
         <p class="card-text">{{ objectOfLabor.description }}</p>
         <ul>
-            <li *ngIf="warehouse" class="card-text">Skladište: {{ warehouse.city }}, {{ warehouse.address }}</li>
+            <li *ngIf="warehouse" class="card-text">Skladište: {{ objectOfLabor.warehouseFullAddress }}}</li>
             <li class="card-text">Količina na zalihama: {{ objectOfLabor.stockQuantity | number }}</li>
             <li class="card-text">Cena: {{ objectOfLabor.price | number: '.2-2' }} RSD</li>
         </ul>
     </div>
 </div>
 
-<div *ngIf="objectOfLabor" class=" card">
+<div *ngIf="objectOfLabor" class="container card procedures-section">
     <div class="card-body">
         <h5 class="card-title">Spisak tehnoloških postupaka</h5>
         <app-object-of-labor-technological-procedure *ngIf="objectOfLabor.objectOfLaborId"
@@ -19,3 +19,6 @@
             [showFinishButton]="false"></app-object-of-labor-technological-procedure>
     </div>
 </div>
+
+<ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

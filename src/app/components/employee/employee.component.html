@@ -1,76 +1,86 @@
-<div class="row">
-    <div class="col-md-3">
-        <label for="search">Pretraga</label>
-        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
-            placeholder="Pretraži radnike" />
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Sortiraj prema</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getEmployees()">
-            <option [ngValue]="'LastName'" selected>Prezime</option>
-            <option [ngValue]="'FirstName'">Ime</option>
-            <option [ngValue]="'Email'">Email</option>
-            <option [ngValue]="'City'">Grad</option>
-            <option [ngValue]="'Address'">Adresa</option>
-            <option [ngValue]="'WorkplaceName'">Radno mesto</option>
-            <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Redosled sortiranja</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getEmployees()">
-            <option [ngValue]="'ASC'" selected>Rastuće</option>
-            <option [ngValue]="'DESC'">Opadajuće</option>
-        </select>
+<div class="container info-section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Radnici</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Informacije o radnicima</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="search">Pretraga</label>
+                    <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search"
+                        (input)="onInputSearch()" placeholder="Pretraži radnike" />
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Sortiraj prema</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getEmployees()">
+                        <option [ngValue]="'LastName'" selected>Prezime</option>
+                        <option [ngValue]="'FirstName'">Ime</option>
+                        <option [ngValue]="'Email'">Email</option>
+                        <option [ngValue]="'City'">Grad</option>
+                        <option [ngValue]="'Address'">Adresa</option>
+                        <option [ngValue]="'WorkplaceName'">Radno mesto</option>
+                        <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Redosled sortiranja</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getEmployees()">
+                        <option [ngValue]="'ASC'" selected>Rastuće</option>
+                        <option [ngValue]="'DESC'">Opadajuće</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Prezime</th>
+                        <th scope="col">Ime</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Grad</th>
+                        <th scope="col">Adresa</th>
+                        <th scope="col">Radno mesto</th>
+                        <th scope="col">Organizaciona jedinica</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let employee of employees" (click)="onClickRow(employee)">
+                        <td>{{ employee.lastName }}</td>
+                        <td>{{ employee.firstName }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.city }}</td>
+                        <td>{{ employee.address }}</td>
+                        <td>{{ employee.workplaceName }}</td>
+                        <td>{{ employee.organizationalUnitName }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-edit"
+                                (click)="onClickUpdate($event, employee)">Izmeni</button>
+                            <button type="button" class="btn btn-danger"
+                                (click)="onClickDelete($event, employee)">Obriši</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between p-2">
+                <ngb-pagination *ngIf="employeesTotalCount" [collectionSize]="employeesTotalCount" [(page)]="page"
+                    [pageSize]="count" (pageChange)="getEmployees()">
+                </ngb-pagination>
+
+                <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+                    (ngModelChange)="getEmployees()">
+                    <option [ngValue]="2">2 stavke po strani</option>
+                    <option [ngValue]="5">5 stavki po strani</option>
+                    <option [ngValue]="10">10 stavki po strani</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-add" (click)="onClickAdd()">Dodaj</button>
+        </div>
     </div>
 </div>
-
-<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Prezime</th>
-            <th scope="col">Ime</th>
-            <th scope="col">Email</th>
-            <th scope="col">Grad</th>
-            <th scope="col">Adresa</th>
-            <th scope="col">Radno mesto</th>
-            <th scope="col">Organizaciona jedinica</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let employee of employees" (click)="onClickRow(employee)">
-            <td>{{ employee.lastName }}</td>
-            <td>{{ employee.firstName }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.city }}</td>
-            <td>{{ employee.address }}</td>
-            <td>{{ employee.workplaceName }}</td>
-            <td>{{ employee.organizationalUnitName }}</td>
-            <td>
-                <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, employee)">Izmeni</button>
-                <button type="button" class="btn btn-danger" (click)="onClickDelete($event, employee)">Obriši</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="d-flex justify-content-between p-2">
-    <ngb-pagination *ngIf="employeesTotalCount" [collectionSize]="employeesTotalCount" [(page)]="page"
-        [pageSize]="count" (pageChange)="getEmployees()">
-    </ngb-pagination>
-
-    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
-        (ngModelChange)="getEmployees()">
-        <option [ngValue]="2">2 stavke po strani</option>
-        <option [ngValue]="5">5 stavki po strani</option>
-        <option [ngValue]="10">10 stavki po strani</option>
-    </select>
-</div>
-
-<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -231,11 +241,6 @@
                 (formGroup.get('dateOfEmployment')?.dirty ||
                 formGroup.get('dateOfEmployment')?.touched ||
                 isSubmitted)">Datum zaposlenja</label>
-                <!-- <input type="text" class="form-control" [class.is-invalid]="formGroup.get('dateOfEmployment')?.invalid && 
-                (formGroup.get('dateOfEmployment')?.dirty ||
-                formGroup.get('dateOfEmployment')?.touched ||
-                isSubmitted)" id="dateOfEmployment" placeholder="Unesite datum zaposlenja"
-                    formControlName="dateOfEmployment"> -->
                 <input class="form-control" [class.is-invalid]="formGroup.get('dateOfEmployment')?.invalid && 
                     (formGroup.get('dateOfEmployment')?.dirty ||
                     formGroup.get('dateOfEmployment')?.touched ||
@@ -293,10 +298,6 @@
         </div>
     </form>
 </ng-template>
-
-<hr />
-
-<pre>{{ closeResult }}</pre>
 
 <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
     [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

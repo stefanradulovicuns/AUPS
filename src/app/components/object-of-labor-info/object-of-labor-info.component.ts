@@ -19,8 +19,7 @@ export class ObjectOfLaborInfoComponent implements OnInit {
   isError: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
-    private objectOfLaborService: ObjectOfLaborService,
-    private warehouseService: WarehouseService) { }
+    private objectOfLaborService: ObjectOfLaborService) { }
 
   ngOnInit(): void {
     this.getObjectOfLabor();
@@ -30,9 +29,6 @@ export class ObjectOfLaborInfoComponent implements OnInit {
     const id = this.activatedRoute.snapshot.params['id'];
     this.objectOfLaborService.getObjectOfLaborById(id).subscribe({
       next: (data) => {
-        if (data.warehouseId) {
-          this.getWarehouse(data.warehouseId);
-        }
         this.objectOfLabor = data;
       },
 
@@ -48,22 +44,8 @@ export class ObjectOfLaborInfoComponent implements OnInit {
     });
   }
 
-  getWarehouse(warehouseId: string) {
-    this.warehouseService.getWarehouseById(warehouseId).subscribe({
-      next: (data) => {
-        this.warehouse = data;
-      },
-
-      error: (error) => {
-        console.log(error);
-        this.toastMessage = 'Došlo je do greške';
-        this.isError = true;
-      },
-
-      complete: () => {
-
-      }
-    });
+  onHideToast() {
+    this.toastMessage = null;
+    this.isError = false;
   }
-
 }

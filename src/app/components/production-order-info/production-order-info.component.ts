@@ -81,4 +81,9 @@ export class ProductionOrderInfoComponent implements OnInit {
     }
   }
 
+  onHideToast() {
+    this.toastMessage = null;
+    this.isError = false;
+  }
+
 }

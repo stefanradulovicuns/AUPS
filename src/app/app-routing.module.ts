@@ -30,20 +30,85 @@ const routes: Routes = [
         component: EmployeeComponent,
         canActivate: [roleGuard],
         data: {
-          expectedRole: 'Admin'
+          expectedRoles: ['Admin']
         }
       },
-      { path: 'radna-mesta', component: WorkplaceComponent },
-      { path: 'organizacione-jedinice', component: OrganizationalUnitComponent },
-      { path: 'nalozi-za-proizvodnju', component: ProductionOrderComponent },
-      { path: 'prnalozi-za-proizvodnjuoductionOrder/:id', component: ProductionOrderInfoComponent },
-      { path: 'predmeti-rada', component: ObjectOfLaborComponent },
-      { path: 'predmeti-rada/:id', component: ObjectOfLaborInfoComponent },
-      { path: 'skladista', component: WarehouseComponent },
-      { path: 'planovi-proizvodnje', component: ProductionPlanComponent },
-      { path: 'pogoni', component: PlantComponent },
-      { path: 'tehnoloski-sistemi', component: TechnologicalSystemComponent },
-      { path: 'tehnoloski-postupci', component: TechnologicalProcedureComponent }
+      // {
+      //   path: 'radna-mesta',
+      //   component: WorkplaceComponent,
+      //   canActivate: [roleGuard],
+      //   data: {
+      //     expectedRoles: ['Admin']
+      //   }
+      // },
+      {
+        path: 'organizacione-jedinice',
+        component: OrganizationalUnitComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin']
+        }
+      },
+      {
+        path: 'nalozi-za-proizvodnju',
+        component: ProductionOrderComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'nalozi-za-proizvodnju/:id',
+        component: ProductionOrderInfoComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'predmeti-rada',
+        component: ObjectOfLaborComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'predmeti-rada/:id',
+        component: ObjectOfLaborInfoComponent,
+        canActivate: [authGuard]
+      },
+      {
+        path: 'skladista',
+        component: WarehouseComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin']
+        }
+      },
+      {
+        path: 'planovi-proizvodnje',
+        component: ProductionPlanComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin', 'Menadzer']
+        }
+      },
+      {
+        path: 'pogoni',
+        component: PlantComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin']
+        }
+      },
+      {
+        path: 'tehnoloski-sistemi',
+        component: TechnologicalSystemComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin']
+        }
+      },
+      {
+        path: 'tehnoloski-postupci',
+        component: TechnologicalProcedureComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin']
+        }
+      }
     ]
   },
 ];

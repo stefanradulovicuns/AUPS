@@ -9,6 +9,7 @@ export class ProductionOrder {
     currentState: number | null = null;
     employeeId: string | null = null;
     manager: string | null = null;
+    managerEmail: string | null = null;
     objectOfLaborId: string | null = null;
     objectOfLaborName: string | null = null;
     totalCount: number | null = null;

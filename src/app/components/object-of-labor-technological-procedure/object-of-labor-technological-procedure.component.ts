@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ObjectOfLaborTechnologicalProcedure } from 'src/app/models/objectOfLaborTechnologicalProcedure';
 import { TechnologicalProcedure } from 'src/app/models/technologicalProcedure';
+import { AuthService } from 'src/app/services/auth.service';
 import { ObjectOfLaborTechnologicalProcedureService } from 'src/app/services/object-of-labor-technological-procedure.service';
 import { TechnologicalProcedureService } from 'src/app/services/technological-procedure.service';
 
@@ -54,7 +55,8 @@ export class ObjectOfLaborTechnologicalProcedureComponent implements OnInit {
   constructor(private objectOfLaborTechnologicalProcedureService: ObjectOfLaborTechnologicalProcedureService,
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private technologicalProcedureService: TechnologicalProcedureService) { }
+    private technologicalProcedureService: TechnologicalProcedureService,
+    public authService: AuthService) { }
 
   ngOnInit(): void {
     this.getObjectOfLaborTechnologicalProcedures();

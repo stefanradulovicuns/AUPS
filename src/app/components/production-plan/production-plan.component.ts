@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ObjectOfLabor } from 'src/app/models/objectOfLabor';
 import { ProductionPlan } from 'src/app/models/productionPlan';
+import { AuthService } from 'src/app/services/auth.service';
 import { ObjectOfLaborService } from 'src/app/services/object-of-labor.service';
 import { ProductionPlanService } from 'src/app/services/production-plan.service';
 
@@ -45,7 +46,8 @@ export class ProductionPlanComponent implements OnInit {
   constructor(private productionPlanService: ProductionPlanService,
     private objectOfLaborService: ObjectOfLaborService,
     private modalService: NgbModal,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    public authService: AuthService) { }
 
   ngOnInit(): void {
     this.getProductionPlans();

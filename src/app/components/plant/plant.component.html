@@ -1,57 +1,68 @@
-<div class="row">
-    <div class="col-md-3">
-        <label for="search">Pretraga</label>
-        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
-            placeholder="Pretraži pogone" />
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Sortiraj prema</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getPlants()">
-            <option [ngValue]="'PlantName'" selected>Naziv pogona</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Redosled sortiranja</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getPlants()">
-            <option [ngValue]="'ASC'" selected>Rastuće</option>
-            <option [ngValue]="'DESC'">Opadajuće</option>
-        </select>
+<div class="container info-section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Pogoni</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Informacije o pogonima</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="search">Pretraga</label>
+                    <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search"
+                        (input)="onInputSearch()" placeholder="Pretraži pogone" />
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Sortiraj prema</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getPlants()">
+                        <option [ngValue]="'PlantName'" selected>Naziv pogona</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Redosled sortiranja</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getPlants()">
+                        <option [ngValue]="'ASC'" selected>Rastuće</option>
+                        <option [ngValue]="'DESC'">Opadajuće</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Naziv pogona</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let plant of plants" (click)="onClickRow(plant)">
+                        <td>{{ plant.plantName }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-edit"
+                                (click)="onClickUpdate($event, plant)">Izmeni</button>
+                            <button type="button" class="btn btn-danger"
+                                (click)="onClickDelete($event, plant)">Obriši</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between p-2">
+                <ngb-pagination *ngIf="plantsTotalCount" [collectionSize]="plantsTotalCount" [(page)]="page"
+                    [pageSize]="count" (pageChange)="getPlants()">
+                </ngb-pagination>
+
+                <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+                    (ngModelChange)="getPlants()">
+                    <option [ngValue]="2">2 stavke po strani</option>
+                    <option [ngValue]="5">5 stavki po strani</option>
+                    <option [ngValue]="10">10 stavki po strani</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-add" (click)="onClickAdd()">Dodaj</button>
+        </div>
     </div>
 </div>
-
-<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Naziv pogona</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let plant of plants" (click)="onClickRow(plant)">
-            <td>{{ plant.plantName }}</td>
-            <td>
-                <button type="button" class="btn btn-primary" (click)="onClickUpdate($event, plant)">Izmeni</button>
-                <button type="button" class="btn btn-danger" (click)="onClickDelete($event, plant)">Obriši</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="d-flex justify-content-between p-2">
-    <ngb-pagination *ngIf="plantsTotalCount" [collectionSize]="plantsTotalCount" [(page)]="page" [pageSize]="count"
-        (pageChange)="getPlants()">
-    </ngb-pagination>
-
-    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count" (ngModelChange)="getPlants()">
-        <option [ngValue]="2">2 stavke po strani</option>
-        <option [ngValue]="5">5 stavki po strani</option>
-        <option [ngValue]="10">10 stavki po strani</option>
-    </select>
-</div>
-
-<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -87,10 +98,6 @@
         </div>
     </form>
 </ng-template>
-
-<hr />
-
-<pre>{{ closeResult }}</pre>
 
 <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
     [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>

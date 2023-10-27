@@ -40,4 +40,38 @@ export class AuthService {
     }
     return false;
   }
+
+  isInRole(expectedRoles: string[]): boolean {
+    if (expectedRoles && expectedRoles.length > 0) {
+      const accessToken = localStorage.getItem('accessToken');
+
+      if (accessToken) {
+        const jwtHelper = new JwtHelperService();
+        const tokenPayload = jwtHelper.decodeToken(accessToken);
+
+        const role = tokenPayload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+        const hasMatchingRole = expectedRoles.some(expectedRole => {
+          return this.isAuthenticated() && role === expectedRole;
+        });
+        if (hasMatchingRole) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  isCurrentUserEmail(email: string) {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken) {
+      const jwtHelper = new JwtHelperService();
+      const tokenPayload = jwtHelper.decodeToken(accessToken);
+
+      const currentUserEmail = tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+      return currentUserEmail === email;
+    }
+    return false;
+  }
 }

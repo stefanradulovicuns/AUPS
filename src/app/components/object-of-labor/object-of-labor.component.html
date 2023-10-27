@@ -1,70 +1,81 @@
-<div class="row">
-    <div class="col-md-3">
-        <label for="search">Pretraga</label>
-        <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search" (input)="onInputSearch()"
-            placeholder="Pretraži predmete rada" />
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Sortiraj prema</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getObjectOfLabors()">
-            <option [ngValue]="'ObjectOfLaborName'" selected>Naziv predmeta rada</option>
-            <option [ngValue]="'Price'">Cena</option>
-            <option [ngValue]="'WarehouseFullAddress'">Skladište</option>
-            <option [ngValue]="'StockQuantity'">Količina na skladištu</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="sortBy">Redosled sortiranja</label>
-        <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getObjectOfLabors()">
-            <option [ngValue]="'ASC'" selected>Rastuće</option>
-            <option [ngValue]="'DESC'">Opadajuće</option>
-        </select>
+<div class="container info-section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Predmeti rada</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Informacije o predmetima rada</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="search">Pretraga</label>
+                    <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search"
+                        (input)="onInputSearch()" placeholder="Pretraži predmete rada" />
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Sortiraj prema</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getObjectOfLabors()">
+                        <option [ngValue]="'ObjectOfLaborName'" selected>Naziv predmeta rada</option>
+                        <option [ngValue]="'Price'">Cena</option>
+                        <option [ngValue]="'WarehouseFullAddress'">Skladište</option>
+                        <option [ngValue]="'StockQuantity'">Količina na skladištu</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Redosled sortiranja</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortOrder"
+                        (ngModelChange)="getObjectOfLabors()">
+                        <option [ngValue]="'ASC'" selected>Rastuće</option>
+                        <option [ngValue]="'DESC'">Opadajuće</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Naziv predmeta rada</th>
+                        <th scope="col">Cena</th>
+                        <th scope="col">Skladište</th>
+                        <th scope="col">Količina na skladištu</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let objectOfLabor of objectOfLabors"
+                        [routerLink]="['/predmeti-rada', objectOfLabor.objectOfLaborId]">
+                        <td>{{ objectOfLabor.objectOfLaborName }}</td>
+                        <td>{{ objectOfLabor.price | number: '.2-2' }} RSD</td>
+                        <td>{{ objectOfLabor.warehouseFullAddress }}</td>
+                        <td>{{ objectOfLabor.stockQuantity | number }}</td>
+                        <td>
+                            <button *ngIf="authService.isInRole(['Admin'])" type="button"
+                                class="btn btn-primary btn-edit"
+                                (click)="onClickUpdate($event, objectOfLabor)">Izmeni</button>
+                            <button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-danger"
+                                (click)="onClickDelete($event, objectOfLabor)">Obriši</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between p-2">
+                <ngb-pagination *ngIf="objectOfLaborsTotalCount" [collectionSize]="objectOfLaborsTotalCount"
+                    [(page)]="page" [pageSize]="count" (pageChange)="getObjectOfLabors()">
+                </ngb-pagination>
+
+                <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+                    (ngModelChange)="getObjectOfLabors()">
+                    <option [ngValue]="2">2 stavke po strani</option>
+                    <option [ngValue]="5">5 stavki po strani</option>
+                    <option [ngValue]="10">10 stavki po strani</option>
+                </select>
+            </div>
+
+            <button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-primary btn-add"
+                (click)="onClickAdd()">Dodaj</button>
+        </div>
     </div>
 </div>
-
-<span class="col col-form-label" *ngIf="isLoading">Loading...</span>
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Naziv predmeta rada</th>
-            <th scope="col">Cena</th>
-            <th scope="col">Skladište</th>
-            <th scope="col">Količina na skladištu</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let objectOfLabor of objectOfLabors"
-            [routerLink]="['/predmeti-rada', objectOfLabor.objectOfLaborId]">
-            <td>{{ objectOfLabor.objectOfLaborName }}</td>
-            <td>{{ objectOfLabor.price | number: '.2-2' }} RSD</td>
-            <td>{{ objectOfLabor.warehouseFullAddress }}</td>
-            <td>{{ objectOfLabor.stockQuantity | number }}</td>
-            <td>
-                <button type="button" class="btn btn-primary"
-                    (click)="onClickUpdate($event, objectOfLabor)">Izmeni</button>
-                <button type="button" class="btn btn-danger"
-                    (click)="onClickDelete($event, objectOfLabor)">Obriši</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="d-flex justify-content-between p-2">
-    <ngb-pagination *ngIf="objectOfLaborsTotalCount" [collectionSize]="objectOfLaborsTotalCount" [(page)]="page"
-        [pageSize]="count" (pageChange)="getObjectOfLabors()">
-    </ngb-pagination>
-
-    <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
-        (ngModelChange)="getObjectOfLabors()">
-        <option [ngValue]="2">2 stavke po strani</option>
-        <option [ngValue]="5">5 stavki po strani</option>
-        <option [ngValue]="10">10 stavki po strani</option>
-    </select>
-</div>
-
-<button type="button" class="btn btn-primary" (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -153,10 +164,6 @@
         </div>
     </form>
 </ng-template>
-
-<hr />
-
-<pre>{{ closeResult }}</pre>
 
 <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
     [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
