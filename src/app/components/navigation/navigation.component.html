@@ -6,15 +6,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li *ngIf="authService.isInRole(['Admin'])" class="nav-item">
-                    <a class="nav-link" routerLink="/radnici">Radnici</a>
-                </li>
-                <!-- <li *ngIf="authService.isInRole(['Admin'])" i class="nav-item">
-                    <a class="nav-link" routerLink="/radna-mesta">Radna mesta</a>
-                </li> -->
-                <li *ngIf="authService.isInRole(['Admin'])" class="nav-item">
-                    <a class="nav-link" routerLink="/organizacione-jedinice">Organizacione jedinice</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/nalozi-za-proizvodnju">Nalozi za proizvodnju</a>
                 </li>
@@ -23,6 +14,15 @@
                 </li>
                 <li *ngIf="authService.isInRole(['Admin', 'Menadzer'])" class="nav-item">
                     <a class="nav-link" routerLink="/planovi-proizvodnje">Planovi proizvodnje</a>
+                </li>
+                <li *ngIf="authService.isInRole(['Admin'])" class="nav-item">
+                    <a class="nav-link" routerLink="/radnici">Radnici</a>
+                </li>
+                <!-- <li *ngIf="authService.isInRole(['Admin'])" i class="nav-item">
+                    <a class="nav-link" routerLink="/radna-mesta">Radna mesta</a>
+                </li> -->
+                <li *ngIf="authService.isInRole(['Admin'])" class="nav-item">
+                    <a class="nav-link" routerLink="/organizacione-jedinice">Organizacione jedinice</a>
                 </li>
                 <li *ngIf="authService.isInRole(['Admin'])" class="nav-item">
                     <a class="nav-link" routerLink="/skladista">Skladišta</a>

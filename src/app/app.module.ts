@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EmployeeComponent } from './components/employee/employee.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgbModalRef, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WorkplaceComponent } from './components/workplace/workplace.component';
@@ -22,7 +22,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
 import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
-import { DatePipe } from '@angular/common';
+import { TokenInterceptor } from './interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
@@ -54,7 +54,11 @@ import { DatePipe } from '@angular/common';
     NgbPaginationModule,
   ],
   providers: [
-    DatePipe
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

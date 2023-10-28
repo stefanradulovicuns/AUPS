@@ -18,30 +18,30 @@ export class ProductionOrderService {
     queryParams = queryParams.append('sortOrder', sortOrder);
     queryParams = queryParams.append('page', page);
     queryParams = queryParams.append('count', count);
-    return this.httpClient.get<ProductionOrder[]>(`${BACKEND_URL}ProductionOrder`, { params: queryParams, headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.get<ProductionOrder[]>(`${BACKEND_URL}ProductionOrder`, { params: queryParams });
   }
 
   getProductionOrderById(id: string): Observable<ProductionOrder> {
-    return this.httpClient.get<ProductionOrder>(`${BACKEND_URL}ProductionOrder/${id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.get<ProductionOrder>(`${BACKEND_URL}ProductionOrder/${id}`);
   }
 
   createProductionOrder(productionOrder: ProductionOrder): Observable<ProductionOrder> {
-    return this.httpClient.post<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.post<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder);
   }
 
   updateProductionOrder(productionOrder: ProductionOrder): Observable<ProductionOrder> {
-    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder`, productionOrder);
   }
 
   startNextTechnologicalProcedure(productionOrder: ProductionOrder): Observable<ProductionOrder> {
-    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/startNextTechnologicalProcedure`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
+    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/startNextTechnologicalProcedure`, productionOrder)
   }
 
   finishCurrentTechnologicalProcedure(productionOrder: ProductionOrder): Observable<ProductionOrder> {
-    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/finishCurrentTechnologicalProcedure`, productionOrder, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } })
+    return this.httpClient.put<ProductionOrder>(`${BACKEND_URL}ProductionOrder/finishCurrentTechnologicalProcedure`, productionOrder)
   }
 
   deleteProductionOrder(id: string): Observable<any> {
-    return this.httpClient.delete<any>(`${BACKEND_URL}ProductionOrder/${id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.delete<any>(`${BACKEND_URL}ProductionOrder/${id}`);
   }
 }

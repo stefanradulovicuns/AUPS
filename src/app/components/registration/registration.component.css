@@ -1,0 +1,9 @@
+.form {
+    max-width: 500px;
+    margin: 50px auto 0 auto;
+}
+
+.btn-submit {
+    margin-top: 30px;
+    justify-content: center;
+}

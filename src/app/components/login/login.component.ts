@@ -51,4 +51,9 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  onHideToast() {
+    this.toastMessage = null;
+    this.isError = false;
+  }
+
 }

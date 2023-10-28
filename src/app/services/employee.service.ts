@@ -18,22 +18,22 @@ export class EmployeeService {
     queryParams = queryParams.append('sortOrder', sortOrder);
     queryParams = queryParams.append('page', page);
     queryParams = queryParams.append('count', count);
-    return this.httpClient.get<Employee[]>(`${BACKEND_URL}Employee`, { params: queryParams, headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.get<Employee[]>(`${BACKEND_URL}Employee`, { params: queryParams });
   }
 
   getEmployeeById(id: string): Observable<Employee> {
-    return this.httpClient.get<Employee>(`${BACKEND_URL}Employee/${id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.get<Employee>(`${BACKEND_URL}Employee/${id}`);
   }
 
   createEmployee(employee: Employee): Observable<Employee> {
-    return this.httpClient.post<Employee>(`${BACKEND_URL}Employee`, employee, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.post<Employee>(`${BACKEND_URL}Employee`, employee);
   }
 
   updateEmployee(employee: Employee): Observable<Employee> {
-    return this.httpClient.put<Employee>(`${BACKEND_URL}Employee`, employee, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.put<Employee>(`${BACKEND_URL}Employee`, employee);
   }
 
   deleteEmployee(id: string): Observable<any> {
-    return this.httpClient.delete<any>(`${BACKEND_URL}Employee/${id}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` } });
+    return this.httpClient.delete<any>(`${BACKEND_URL}Employee/${id}`);
   }
 }
