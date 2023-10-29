@@ -15,9 +15,9 @@
                         (ngModelChange)="getTechnologicalProcedures()">
                         <option [ngValue]="'TechnologicalProcedureName'" selected>Naziv tehnološkog postupka</option>
                         <option [ngValue]="'Duration'">Vreme trajanja</option>
-                        <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
                         <option [ngValue]="'TechnologicalSystemName'">Tehnološki sistem</option>
                         <option [ngValue]="'Plant'">Pogon</option>
+                        <option [ngValue]="'OrganizationalUnitName'">Organizaciona jedinica</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -37,9 +37,9 @@
                     <tr>
                         <th scope="col">Naziv tehnološkog postupka</th>
                         <th scope="col">Vreme trajanja</th>
-                        <th scope="col">Organizaciona jedinica</th>
                         <th scope="col">Tehnološki sistem</th>
                         <th scope="col">Pogon</th>
+                        <th scope="col">Organizaciona jedinica</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -48,9 +48,9 @@
                         (click)="onClickRow(technologicalProcedure)">
                         <td>{{ technologicalProcedure.technologicalProcedureName }}</td>
                         <td>{{ technologicalProcedure.duration | number }} min</td>
-                        <td>{{ technologicalProcedure.organizationalUnitName }}</td>
                         <td>{{ technologicalProcedure.technologicalSystemName }}</td>
                         <td>{{ technologicalProcedure.plantName }}</td>
+                        <td>{{ technologicalProcedure.organizationalUnitName }}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-edit"
                                 (click)="onClickUpdate($event, technologicalProcedure)">Izmeni</button>
