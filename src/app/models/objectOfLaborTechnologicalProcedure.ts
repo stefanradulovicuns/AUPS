@@ -8,6 +8,7 @@ export class ObjectOfLaborTechnologicalProcedure {
     technologicalProcedureDuration: number | null = null;
     technologicalSystemName: string | null = null;
     plantName: string | null = null;
+    organizationalUnitId: string | null = null;
     organizationalUnitName: string | null = null;
     totalCount: number | null = null;
 

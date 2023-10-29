@@ -74,4 +74,17 @@ export class AuthService {
     }
     return false;
   }
+
+  isInOrganizationalUnit(organizationalUnitId: string | null) {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (accessToken && organizationalUnitId) {
+      const jwtHelper = new JwtHelperService();
+      const tokenPayload = jwtHelper.decodeToken(accessToken);
+
+      const organizationalUnitId = tokenPayload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+      return organizationalUnitId === organizationalUnitId;
+    }
+    return false;
+  }
 }

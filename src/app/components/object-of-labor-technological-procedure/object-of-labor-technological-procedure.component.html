@@ -76,8 +76,9 @@
                     objectOfLaborTechnologicalProcedure.orderOfExecution && 
                     currentTechnologicalProcedure !== null && 
                     currentTechnologicalProcedure + 1 === objectOfLaborTechnologicalProcedure.orderOfExecution &&
-                    authService.isInRole(['Radnik u proizvodnji'])" type="button" class="btn btn-success"
-                    (click)="onClickStart($event)">Započni</button>
+                    authService.isInRole(['Radnik u proizvodnji']) &&
+                    authService.isInOrganizationalUnit(objectOfLaborTechnologicalProcedure.organizationalUnitId)"
+                    type="button" class="btn btn-success" (click)="onClickStart($event)">Započni</button>
                 <button *ngIf="showFinishButton && 
                     currentTechnologicalProcedureExecuted === true && 
                     currentTechnologicalProcedure && 

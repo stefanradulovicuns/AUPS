@@ -45,7 +45,6 @@ export class ProductionOrderComponent implements OnInit {
   isSubmitted: boolean = false;
   operation: string | null = null;
 
-  employees: Employee[] | null = null;
   objectOfLabors: ObjectOfLabor[] | null = null;
 
   toastMessage: string | null = null;
@@ -61,7 +60,6 @@ export class ProductionOrderComponent implements OnInit {
   ngOnInit(): void {
     this.getProductionOrders();
     this.getObjectOfLabors();
-    this.getEmployees();
   }
 
   getProductionOrders() {
@@ -126,22 +124,6 @@ export class ProductionOrderComponent implements OnInit {
         this.getProductionOrders();
         this.modalReference?.close();
         this.toastMessage = 'Nalog za proizvodnju je uspešno obrisan';
-      },
-
-      error: (error) => {
-        console.log(error);
-        this.toastMessage = 'Došlo je do greške';
-        this.isError = true;
-      },
-
-      complete: () => { }
-    });
-  }
-
-  getEmployees() {
-    this.employeeService.getEmployees('', 'FirstName', 'ASC', 0, 0).subscribe({
-      next: (data) => {
-        this.employees = data;
       },
 
       error: (error) => {
