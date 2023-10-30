@@ -21,7 +21,7 @@ export class TechnologicalSystemComponent implements OnInit {
   sortBy: string = 'TechnologicalSystemName';
   sortOrder: string = 'ASC';
   page: number = 1;
-  count: number = 2;
+  count: number = 5;
   isLoading: boolean = false
 
   closeResult = ''

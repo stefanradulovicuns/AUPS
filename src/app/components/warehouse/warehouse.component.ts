@@ -21,7 +21,7 @@ export class WarehouseComponent implements OnInit {
   sortBy: string = 'City';
   sortOrder: string = 'ASC';
   page: number = 1;
-  count: number = 2;
+  count: number = 5;
   isLoading: boolean = false
 
   closeResult = ''

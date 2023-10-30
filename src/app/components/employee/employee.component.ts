@@ -25,7 +25,7 @@ export class EmployeeComponent implements OnInit {
   sortBy: string = 'LastName';
   sortOrder: string = 'ASC';
   page: number = 1;
-  count: number = 2;
+  count: number = 5;
   isLoading: boolean = false
 
   closeResult = ''
