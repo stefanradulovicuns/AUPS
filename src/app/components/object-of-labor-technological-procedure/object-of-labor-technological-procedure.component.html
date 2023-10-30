@@ -37,7 +37,6 @@
             <th scope="col">Tehnološki sistem</th>
             <th scope="col">Pogon</th>
             <th scope="col">Organizaciona jedinica</th>
-            <th scope="col">Izvršilac</th>
             <th *ngIf="showCurrentState" scope="col">Stanje</th>
             <th scope="col"></th>
         </tr>
@@ -51,7 +50,6 @@
             <td>{{ objectOfLaborTechnologicalProcedure.technologicalSystemName }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.plantName }}</td>
             <td>{{ objectOfLaborTechnologicalProcedure.organizationalUnitName }}</td>
-            <td>/</td>
             <td *ngIf="showCurrentState && currentTechnologicalProcedure !== null">
                 <span
                     *ngIf="objectOfLaborTechnologicalProcedure.orderOfExecution && (currentTechnologicalProcedure > objectOfLaborTechnologicalProcedure.orderOfExecution || (currentTechnologicalProcedure === objectOfLaborTechnologicalProcedure.orderOfExecution && currentTechnologicalProcedureExecuted === false))"
