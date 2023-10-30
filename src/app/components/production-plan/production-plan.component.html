@@ -41,11 +41,11 @@
                         <td>{{ productionPlan.productionPlanName }}</td>
                         <td>{{ productionPlan.objectOfLaborName }}</td>
                         <td>
-                            <button *ngIf="authService.isInRole(['Admin'])" type="button"
+                            <button *ngIf="authService.isInRole(['Admin', 'Menadzer'])" type="button"
                                 class="btn btn-primary btn-edit"
                                 (click)="onClickUpdate($event, productionPlan)">Izmeni</button>
-                            <button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-danger"
-                                (click)="onClickDelete($event, productionPlan)">Obriši</button>
+                            <button *ngIf="authService.isInRole(['Admin', 'Menadzer'])" type="button"
+                                class="btn btn-danger" (click)="onClickDelete($event, productionPlan)">Obriši</button>
                         </td>
                     </tr>
                 </tbody>
@@ -64,7 +64,7 @@
                 </select>
             </div>
 
-            <button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-primary btn-add"
+            <button *ngIf="authService.isInRole(['Admin', 'Menadzer'])" type="button" class="btn btn-primary btn-add"
                 (click)="onClickAdd()">Dodaj</button>
         </div>
     </div>
