@@ -23,6 +23,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
 import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { MaterialComponent } from './components/material/material.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
     RegistrationComponent,
     ObjectOfLaborInfoComponent,
     ProductionOrderInfoComponent,
+    MaterialComponent
   ],
   imports: [
     BrowserModule,

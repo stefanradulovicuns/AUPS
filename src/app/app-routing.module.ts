@@ -18,6 +18,7 @@ import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/object-of-labor-info.component';
 import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
+import { MaterialComponent } from './components/material/material.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'radnici', pathMatch: 'full' },
@@ -68,6 +69,14 @@ const routes: Routes = [
         path: 'predmeti-rada/:id',
         component: ObjectOfLaborInfoComponent,
         canActivate: [authGuard]
+      },
+      {
+        path: 'materijali',
+        component: MaterialComponent,
+        canActivate: [roleGuard],
+        data: {
+          expectedRoles: ['Admin']
+        }
       },
       {
         path: 'skladista',

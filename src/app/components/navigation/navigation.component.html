@@ -12,6 +12,9 @@
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/predmeti-rada">Predmeti rada</a>
                 </li>
+                <li *ngIf="authService.isInRole(['Admin'])" class="nav-item">
+                    <a class="nav-link" routerLink="/materijali">Materijali</a>
+                </li>
                 <li *ngIf="authService.isInRole(['Admin', 'Menadzer'])" class="nav-item">
                     <a class="nav-link" routerLink="/planovi-proizvodnje">Planovi proizvodnje</a>
                 </li>

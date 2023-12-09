@@ -1,0 +1,122 @@
+<div class="container info-section">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Materijali</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">Informacije o materijalima</h6>
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="search">Pretraga</label>
+                    <input id="search" type="text" class="form-control" name="serach" [(ngModel)]="search"
+                        (input)="onInputSearch()" placeholder="Pretraži materijale" />
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Sortiraj prema</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortBy" (ngModelChange)="getMaterials()">
+                        <option [ngValue]="'MaterialName'" selected>Naziv materijala</option>
+                        <option [ngValue]="'StockQuantity'">Količina na zalihama</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortBy">Redosled sortiranja</label>
+                    <select id="sortBy" class="form-select" [(ngModel)]="sortOrder" (ngModelChange)="getMaterials()">
+                        <option [ngValue]="'ASC'" selected>Rastuće</option>
+                        <option [ngValue]="'DESC'">Opadajuće</option>
+                    </select>
+                </div>
+            </div>
+
+            <span class="col col-form-label" *ngIf="isLoading">Loading...</span>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Materijal</th>
+                        <th scope="col">Količina na zalihama</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let material of materials" (click)="onClickRow(material)">
+                        <td>{{ material.materialName }}</td>
+                        <td>{{ material.stockQuantity | number }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-edit"
+                                (click)="onClickUpdate($event, material)">Izmeni</button>
+                            <button type="button" class="btn btn-danger"
+                                (click)="onClickDelete($event, material)">Obriši</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between p-2">
+                <ngb-pagination *ngIf="materialsTotalCount" [collectionSize]="materialsTotalCount" [(page)]="page"
+                    [pageSize]="count" (pageChange)="getMaterials()">
+                </ngb-pagination>
+
+                <select class="form-select" style="width: auto" name="pageSize" [(ngModel)]="count"
+                    (ngModelChange)="getMaterials()">
+                    <option [ngValue]="2">2 stavke po strani</option>
+                    <option [ngValue]="5">5 stavki po strani</option>
+                    <option [ngValue]="10">10 stavki po strani</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary btn-add" (click)="onClickAdd()">Dodaj</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 *ngIf="operation==='REVIEW'" class="modal-title" id="modal-basic-title">Podaci o materialu</h4>
+        <h4 *ngIf="operation==='CREATE'" class="modal-title" id="modal-basic-title">Novi materijal</h4>
+        <h4 *ngIf="operation==='UPDATE'" class="modal-title" id="modal-basic-title">Izmena podataka o materijalu</h4>
+        <h4 *ngIf="operation==='DELETE'" class="modal-title" id="modal-basic-title">Brisanje podataka o materijalu</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="formGroup" (submit)="onSubmitForm()">
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="materialName" [class.text-danger]="formGroup.get('materialName')?.invalid && 
+                (formGroup.get('materialName')?.dirty ||
+                formGroup.get('materialName')?.touched ||
+                isSubmitted)">Naziv materijala</label>
+                <input type="text" class="form-control" [class.is-invalid]="formGroup.get('materialName')?.invalid && 
+                (formGroup.get('materialName')?.dirty ||
+                formGroup.get('materialName')?.touched ||
+                isSubmitted)" id="materialName" placeholder="Unesite naziv materijala" formControlName="materialName">
+                <span *ngIf="formGroup.get('city')?.hasError('required') && 
+                (formGroup.get('materialName')?.dirty ||
+                formGroup.get('materialName')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+            <div class="form-group">
+                <label for="stockQuantity" [class.text-danger]="formGroup.get('stockQuantity')?.invalid && 
+                (formGroup.get('stockQuantity')?.dirty ||
+                formGroup.get('stockQuantity')?.touched ||
+                isSubmitted)">Količina na zalihama</label>
+                <input type="number" class="form-control" [class.is-invalid]="formGroup.get('stockQuantity')?.invalid && 
+                (formGroup.get('stockQuantity')?.dirty ||
+                formGroup.get('stockQuantity')?.touched ||
+                isSubmitted)" id="capacity" placeholder="Unesite količinu na zalihama" formControlName="stockQuantity">
+                <span *ngIf="formGroup.get('stockQuantity')?.hasError('required') && 
+                (formGroup.get('stockQuantity')?.dirty ||
+                formGroup.get('stockQuantity')?.touched ||
+                isSubmitted)" class="text-danger">Ovo polje je obavezno</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button *ngIf="operation==='CREATE' || operation==='UPDATE'" type="submit"
+                class="btn btn-primary">Potvrdi</button>
+            <button *ngIf="operation==='DELETE'" type="button" class="btn btn-danger"
+                (click)=" deleteMaterial(formGroup.get('materialId')?.value)">Obriši</button>
+            <button type="button" class="btn btn-dark" (click)="modal.close('Save click')">Zatvori</button>
+        </div>
+    </form>
+</ng-template>
+
+<div class="container">
+    <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+        [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
+</div>
