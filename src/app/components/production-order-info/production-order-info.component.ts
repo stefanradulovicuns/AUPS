@@ -70,7 +70,11 @@ export class ProductionOrderInfoComponent implements OnInit {
 
         error: (error) => {
           console.log(error);
-          this.toastMessage = 'Došlo je do greške';
+          if (error.error === 'Nema dovoljno materijala na zalihama.') {
+            this.toastMessage = 'Nema dovoljno materijala na zalihama.';
+          } else {
+            this.toastMessage = 'Došlo je do greške';
+          }
           this.isError = true;
         },
 

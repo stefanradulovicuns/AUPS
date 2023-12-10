@@ -13,3 +13,9 @@
 .btn-add {
     margin-left: 10px;
 }
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}

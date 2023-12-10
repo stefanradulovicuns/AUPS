@@ -182,6 +182,6 @@
 </ng-template>
 
 <div class="container">
-    <ngb-toast class="text-light toast-message" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    <ngb-toast class="text-light toast-message toast" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
         [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
 </div>

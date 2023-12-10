@@ -28,7 +28,16 @@
     </div>
 </div>
 
+<div *ngIf="productionOrder" class="container card procedures-section">
+    <div class="card-body">
+        <h5 class="card-title">Spisak potrebnih materijala</h5>
+        <app-object-of-labor-material *ngIf="productionOrder.objectOfLaborId"
+            [objectOfLaborId]="productionOrder.objectOfLaborId">
+        </app-object-of-labor-material>
+    </div>
+</div>
+
 <div class="container">
-    <ngb-toast class="text-light" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
+    <ngb-toast class="text-light toast toast" *ngIf="toastMessage" [autohide]="true" (hidden)="onHideToast()"
         [ngClass]="isError ? 'bg-danger' : 'bg-success'">{{toastMessage}}</ngb-toast>
 </div>
