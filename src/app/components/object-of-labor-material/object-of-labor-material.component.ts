@@ -14,6 +14,7 @@ import { ObjectOfLaborMaterialService } from 'src/app/services/object-of-labor-m
 })
 export class ObjectOfLaborMaterialComponent {
   @Input() objectOfLaborId: string = '';
+  @Input() showAdminButtons: boolean = false;
 
   @ViewChild('content') modal!: ElementRef;
 

@@ -37,9 +37,10 @@
             <td>{{ objectOfLaborMaterial.quantity }}</td>
             <td>{{ objectOfLaborMaterial.stockQuantity }}</td>
             <td>
-                <button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-primary btn-edit"
+                <button *ngIf="showAdminButtons && authService.isInRole(['Admin'])" type="button"
+                    class="btn btn-primary btn-edit"
                     (click)="onClickUpdate($event, objectOfLaborMaterial)">Izmeni</button>
-                <button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-danger"
+                <button *ngIf="showAdminButtons && authService.isInRole(['Admin'])" type="button" class="btn btn-danger"
                     (click)="onClickDelete($event, objectOfLaborMaterial)">Obriši</button>
             </td>
         </tr>
@@ -59,7 +60,7 @@
     </select>
 </div>
 
-<button *ngIf="authService.isInRole(['Admin'])" type="button" class="btn btn-primary btn-add"
+<button *ngIf="showAdminButtons && authService.isInRole(['Admin'])" type="button" class="btn btn-primary btn-add"
     (click)="onClickAdd()">Dodaj</button>
 
 <ng-template #content let-modal>
