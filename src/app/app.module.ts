@@ -24,6 +24,7 @@ import { ObjectOfLaborInfoComponent } from './components/object-of-labor-info/ob
 import { ProductionOrderInfoComponent } from './components/production-order-info/production-order-info.component';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { MaterialComponent } from './components/material/material.component';
+import { ObjectOfLaborMaterialComponent } from './components/object-of-labor-material/object-of-labor-material.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MaterialComponent } from './components/material/material.component';
     RegistrationComponent,
     ObjectOfLaborInfoComponent,
     ProductionOrderInfoComponent,
-    MaterialComponent
+    MaterialComponent,
+    ObjectOfLaborMaterialComponent
   ],
   imports: [
     BrowserModule,
